@@ -7,9 +7,7 @@ description = "Library wrapping Google speech-to-text, text-to-speech and dialog
 license = "MIT OR Apache-2.0"
 keywords = ["speech", "google", "cognitive", "recognition", "synthesizing"]
 categories = ["multimedia", "multimedia::audio", "text-processing"]
-exclude = [
-    "examples/*"
-]
+exclude = ["examples/*"]
 repository = "https://github.com/jabber-tools/google-cognitive-apis/"
 documentation = "https://jabber-tools.github.io/google_cognitive_apis/doc/0.2.0/google_cognitive_apis/index.html"
 
@@ -37,17 +35,14 @@ env_logger = "0.8.3"
 futures-util = "0.3.15"
 
 [features]
-default = [
-    "speech-to-text",
-    "text-to-speech",
-    "dialogflow",
-]
+default = ["speech-to-text", "text-to-speech", "dialogflow"]
 
 google-cloud-texttospeech-v1 = []
 google-cloud-texttospeech-v1beta1 = []
 
 google-cloud-speechtotext-v1 = []
 google-cloud-speechtotext-v1p1beta1 = []
+google-cloud-speechtotext-v2 = []
 
 google-cloud-dialogflow-v2 = []
 google-cloud-dialogflow-v2beta1 = []
@@ -57,6 +52,7 @@ google-cloud-dialogflow-cx-v3beta1 = []
 speech-to-text = [
     "google-cloud-speechtotext-v1",
     "google-cloud-speechtotext-v1p1beta1",
+    "google-cloud-speechtotext-v2",
 ]
 
 text-to-speech = [
