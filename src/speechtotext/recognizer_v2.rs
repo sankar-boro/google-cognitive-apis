@@ -48,6 +48,10 @@ pub struct Recognizer {
     /// where STT results will be sent. Library client is using respective
     /// receiver to get the results. See example recognizer_streaming for details
     result_sender: Option<mpsc::Sender<StreamingRecognizeResponse>>,
+
+    /// Required. The name of the Recognizer to use during recognition. The expected format is projects/{project}/locations/{location}/recognizers/{recognizer}.
+    /// The {recognizer} segment may be set to _ to use an empty implicit Recognizer.
+    recognizer: String,
 }
 
 impl Recognizer {
@@ -62,6 +66,8 @@ impl Recognizer {
         // Capacity of audio sink (tokio channel used by caller to send audio data).
         // If not provided defaults to 1000.
         buffer_size: Option<usize>,
+        //
+        recognizer: String,
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
 
@@ -90,6 +96,7 @@ impl Recognizer {
             audio_sender: Some(audio_sender),
             audio_receiver: Some(audio_receiver),
             result_sender: None,
+            recognizer,
         })
     }
 
@@ -98,6 +105,7 @@ impl Recognizer {
     /// for long running recognition.
     pub async fn create_asynchronous_recognizer(
         google_credentials: impl AsRef<str>,
+        recognizer: String,
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
 
@@ -117,6 +125,7 @@ impl Recognizer {
             audio_sender: None,
             audio_receiver: None,
             result_sender: None,
+            recognizer,
         })
     }
 
@@ -125,6 +134,7 @@ impl Recognizer {
     /// for synchronous recognition.
     pub async fn create_synchronous_recognizer(
         google_credentials: impl AsRef<str>,
+        recognizer: String,
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
 
@@ -139,6 +149,7 @@ impl Recognizer {
             audio_sender: None,
             audio_receiver: None,
             result_sender: None,
+            recognizer,
         })
     }
 
@@ -184,11 +195,15 @@ impl Recognizer {
 
     /// Convenience function so that client does not have to create full StreamingRecognizeRequest
     /// and can just pass audio bytes vector instead.
-    // pub fn streaming_request_from_bytes(audio_bytes: Vec<u8>) -> StreamingRecognizeRequest {
-    //     StreamingRecognizeRequest {
-    //         streaming_request: Some(StreamingRequest::AudioContent(audio_bytes)),
-    //     }
-    // }
+    pub fn streaming_request_from_bytes(
+        audio_bytes: Vec<u8>,
+        recognizer: String,
+    ) -> StreamingRecognizeRequest {
+        StreamingRecognizeRequest {
+            streaming_request: Some(StreamingRequest::Audio(audio_bytes)),
+            recognizer,
+        }
+    }
 
     /// Initiates bidirectional streaming. Returns
     /// asynchronous stream of streaming recognition results
