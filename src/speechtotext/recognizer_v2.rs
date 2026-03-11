@@ -84,7 +84,7 @@ impl Recognizer {
         // };
 
         let streaming_config = StreamingRecognizeRequest {
-            recognizer: "".to_string(),
+            recognizer: recognizer.clone(),
             streaming_request: Some(StreamingRequest::StreamingConfig(config)),
         };
 
