@@ -1,7 +1,10 @@
 #![allow(clippy::from_over_into)]
 #![allow(clippy::manual_unwrap_or)]
 #![allow(clippy::manual_map)]
-use crate::api::grpc::google::cloud::speechtotext::v2::SpeechAdaptation as GrpcSpeechAdaptation;
+use crate::api::grpc::google::cloud::speechtotext::v2::recognition_config::DecodingConfig as GrpcDecodingConfig;
+use crate::api::grpc::google::cloud::speechtotext::v2::{
+    ExplicitDecodingConfig, SpeechAdaptation as GrpcSpeechAdaptation,
+};
 /// This module DOES NOT address all the differences between GRPC v1 and v1p1beta1 proto definitions
 /// of speech-to-text API. For now it only defines extended version of SpeechContext struct
 /// where boost parameter is added. Also RecognitionConfig using new SpeechContext is defined here.
@@ -41,12 +44,12 @@ use super::common::{
     RecognitionConfigModel,
     // RecognitionMetadata,
 };
-
 use crate::api::grpc::google::cloud::speechtotext::v2::custom_class::ClassItem as GrpcClassItem;
 use crate::api::grpc::google::cloud::speechtotext::v2::phrase_set::Phrase as GrpcPhrase;
 use crate::api::grpc::google::cloud::speechtotext::v2::CustomClass as GrpcCustomClass;
 use crate::api::grpc::google::cloud::speechtotext::v2::PhraseSet as GrpcPhraseSet;
 use crate::api::grpc::google::cloud::speechtotext::v2::RecognitionConfig as GrpcRecognitionConfig;
+use crate::api::grpc::google::cloud::speechtotext::v2::RecognitionFeatures as GrpcRecognitionFeatures;
 use crate::api::grpc::google::cloud::speechtotext::v2::SpeakerDiarizationConfig as GrpcSpeakerDiarizationConfig;
 
 // #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -150,65 +153,27 @@ pub struct RecognitionConfig {
 impl Into<GrpcRecognitionConfig> for RecognitionConfig {
     fn into(self) -> GrpcRecognitionConfig {
         GrpcRecognitionConfig {
-            model: todo!(),
-            language_codes: todo!(),
-            features: todo!(),
-            adaptation: todo!(),
-            transcript_normalization: todo!(),
-            translation_config: todo!(),
-            denoiser_config: todo!(),
-            decoding_config: todo!(),
-            // encoding: match self.encoding {
-            //     AudioEncoding::ENCODING_UNSPECIFIED => 0,
-            //     AudioEncoding::LINEAR16 => 1,
-            //     AudioEncoding::FLAC => 2,
-            //     AudioEncoding::MULAW => 3,
-            //     AudioEncoding::AMR => 4,
-            //     AudioEncoding::AMR_WB => 5,
-            //     AudioEncoding::OGG_OPUS => 6,
-            //     AudioEncoding::SPEEX_WITH_HEADER_BYTE => 7,
-            // },
-            // sample_rate_hertz: match self.sample_rate_hertz {
-            //     Some(val) => val,
-            //     None => 8000,
-            // },
-            // audio_channel_count: self.audio_channel_count,
-            // enable_separate_recognition_per_channel: self.enable_separate_recognition_per_channel,
-            // language_code: self.language_code,
-            // max_alternatives: self.max_alternatives,
-            // profanity_filter: self.profanity_filter,
-            // speech_contexts: {
-            //     let mut speech_contexts: Vec<GrpcSpeechContext> = vec![];
+            model: self.model.to_string(),
+            language_codes: vec![self.language_code],
 
-            //     for item in self.speech_contexts {
-            //         speech_contexts.push(item.into())
-            //     }
-            //     speech_contexts
-            // },
-            // enable_word_time_offsets: self.enable_word_time_offsets,
-            // enable_automatic_punctuation: self.enable_automatic_punctuation,
-            // // So far not supported!
-            // diarization_config: None,
-            // // So far not supported!
-            // metadata: None,
-            // model: self.model.to_string(),
-            // use_enhanced: match self.use_enhanced {
-            //     Some(val) => val,
-            //     _ => false,
-            // },
-            // adaptation: match self.adaptation {
-            //     Some(adpt) => Some(adpt.into()),
-            //     _ => None,
-            // },
-            // // Below are the new v1p1beta1 attributes of RecognitionConfig
-            // // Since we introduced this config initially for enhanced SpeechContext
-            // // only these are not supported currently and we map just default/None values!
-            // alternative_language_codes: vec![],
-            // diarization_speaker_count: 2,
-            // enable_speaker_diarization: false,
-            // enable_spoken_emojis: None,
-            // enable_spoken_punctuation: None,
-            // enable_word_confidence: false,
+            features: Some(GrpcRecognitionFeatures {
+                profanity_filter: self.profanity_filter,
+                enable_word_time_offsets: self.enable_word_time_offsets,
+                enable_automatic_punctuation: self.enable_automatic_punctuation,
+                ..Default::default()
+            }),
+
+            adaptation: self.adaptation.map(Into::into),
+
+            decoding_config: Some(GrpcDecodingConfig::ExplicitDecodingConfig(
+                ExplicitDecodingConfig {
+                    encoding: self.encoding as i32,
+                    sample_rate_hertz: self.sample_rate_hertz.unwrap_or(8000),
+                    audio_channel_count: self.audio_channel_count,
+                },
+            )),
+
+            ..Default::default()
         }
     }
 }
@@ -228,31 +193,7 @@ pub struct SpeechAdaptation {
 impl Into<GrpcSpeechAdaptation> for SpeechAdaptation {
     fn into(self) -> GrpcSpeechAdaptation {
         GrpcSpeechAdaptation {
-            phrase_sets: {
-                // let mut phrase_sets: Vec<GrpcPhraseSet> = vec![];
-
-                // for item in self.phrase_sets {
-                //     phrase_sets.push(item.into())
-                // }
-                // phrase_sets
-                todo!()
-            },
-            // phrase_set_references: {
-            //     let mut phrase_set_references: Vec<String> = vec![];
-
-            //     for item in self.phrase_set_references {
-            //         phrase_set_references.push(item.to_owned())
-            //     }
-            //     phrase_set_references
-            // },
-            custom_classes: {
-                let mut custom_classes: Vec<GrpcCustomClass> = vec![];
-
-                for item in self.custom_classes {
-                    custom_classes.push(item.into())
-                }
-                custom_classes
-            },
+            ..Default::default()
         }
     }
 }
@@ -268,27 +209,9 @@ impl Into<GrpcPhraseSet> for PhraseSet {
     fn into(self) -> GrpcPhraseSet {
         GrpcPhraseSet {
             name: self.name,
-            phrases: {
-                let mut grpc_phrases: Vec<GrpcPhrase> = vec![];
-
-                for item in self.phrases {
-                    grpc_phrases.push(item.into())
-                }
-                grpc_phrases
-            },
+            phrases: self.phrases.into_iter().map(Into::into).collect(),
             boost: self.boost,
-            uid: todo!(),
-            display_name: todo!(),
-            state: todo!(),
-            create_time: todo!(),
-            update_time: todo!(),
-            delete_time: todo!(),
-            expire_time: todo!(),
-            annotations: todo!(),
-            etag: todo!(),
-            reconciling: todo!(),
-            kms_key_name: todo!(),
-            kms_key_version_name: todo!(),
+            ..Default::default()
         }
     }
 }
@@ -322,29 +245,12 @@ impl Into<GrpcCustomClass> for CustomClass {
     fn into(self) -> GrpcCustomClass {
         GrpcCustomClass {
             name: self.name,
-            // custom_class_id: self.custom_class_id,
-            items: {
-                let mut cc_items: Vec<GrpcClassItem> = vec![];
-
-                for item in self.items {
-                    cc_items.push(GrpcClassItem {
-                        value: item.value.to_owned(),
-                    })
-                }
-                cc_items
-            },
-            uid: todo!(),
-            display_name: todo!(),
-            state: todo!(),
-            create_time: todo!(),
-            update_time: todo!(),
-            delete_time: todo!(),
-            expire_time: todo!(),
-            annotations: todo!(),
-            etag: todo!(),
-            reconciling: todo!(),
-            kms_key_name: todo!(),
-            kms_key_version_name: todo!(),
+            items: self
+                .items
+                .into_iter()
+                .map(|item| GrpcClassItem { value: item.value })
+                .collect(),
+            ..Default::default()
         }
     }
 }
