@@ -17,6 +17,7 @@ use log::*;
 use prost::Message;
 use std::io::Cursor;
 use std::result::Result as StdResult;
+use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc;
 use tokio::time::sleep;
@@ -75,6 +76,51 @@ impl Recognizer {
 
         let speech_client =
             SpeechClient::with_interceptor(channel, new_interceptor(token_header_val));
+
+        let (audio_sender, audio_receiver) =
+            mpsc::channel::<StreamingRecognizeRequest>(buffer_size.unwrap_or(1000));
+
+        // let streaming_config = StreamingRecognizeRequest {
+        //     streaming_request: Some(StreamingRequest::StreamingConfig(config)),
+        // };
+
+        let streaming_config = StreamingRecognizeRequest {
+            recognizer: recognizer.clone(),
+            streaming_request: Some(StreamingRequest::StreamingConfig(config)),
+        };
+
+        audio_sender.send(streaming_config).await.unwrap();
+
+        Ok(Recognizer {
+            speech_client,
+            operations_client: None,
+            audio_sender: Some(audio_sender),
+            audio_receiver: Some(audio_receiver),
+            result_sender: None,
+            recognizer,
+        })
+    }
+
+    /// Creates new speech recognizer from provided
+    /// Google credentials and google speech configuration.
+    /// This kind of recognizer can be used for streaming recognition.
+    pub async fn create_streaming_recognizer_from_token(
+        // Google Cloud Platform JSON credentials for project with Speech APIs enabled
+        token: String,
+        //  Streaming recognition configuration
+        config: StreamingRecognitionConfig,
+        // Capacity of audio sink (tokio channel used by caller to send audio data).
+        // If not provided defaults to 1000.
+        buffer_size: Option<usize>,
+        //
+        recognizer: String,
+    ) -> Result<Self> {
+        let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
+
+        // let token_header_val = get_token(google_credentials)?;
+
+        let speech_client =
+            SpeechClient::with_interceptor(channel, new_interceptor(Arc::new(token)));
 
         let (audio_sender, audio_receiver) =
             mpsc::channel::<StreamingRecognizeRequest>(buffer_size.unwrap_or(1000));
