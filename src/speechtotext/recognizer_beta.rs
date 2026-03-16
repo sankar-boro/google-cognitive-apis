@@ -118,24 +118,17 @@ impl Recognizer {
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
 
-        // let token_header_val = get_token(google_credentials)?;
-
         let speech_client =
             SpeechClient::with_interceptor(channel, new_interceptor(Arc::new(token)));
 
         let (audio_sender, audio_receiver) =
             mpsc::channel::<StreamingRecognizeRequest>(buffer_size.unwrap_or(1000));
 
-        // let streaming_config = StreamingRecognizeRequest {
-        //     streaming_request: Some(StreamingRequest::StreamingConfig(config)),
-        // };
+        let streaming_config = StreamingRecognizeRequest {
+            streaming_request: Some(StreamingRequest::StreamingConfig(config)),
+        };
 
-        // let streaming_config = StreamingRecognizeRequest {
-        //     recognizer: recognizer.clone(),
-        //     streaming_request: Some(StreamingRequest::StreamingConfig(config)),
-        // };
-
-        // audio_sender.send(streaming_config).await.unwrap();
+        audio_sender.send(streaming_config).await.unwrap();
 
         Ok(Recognizer {
             speech_client,
