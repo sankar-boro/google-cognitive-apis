@@ -1,132 +1,140 @@
 /// Request message for the
 /// \[CreateRecognizer][google.cloud.speech.v2.Speech.CreateRecognizer\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateRecognizerRequest {
     /// Required. The Recognizer to create.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub recognizer: ::core::option::Option<Recognizer>,
     /// If set, validate the request and preview the Recognizer, but do not
     /// actually create it.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub validate_only: bool,
     /// The ID to use for the Recognizer, which will become the final component of
     /// the Recognizer's resource name.
     ///
     /// This value should be 4-63 characters, and valid characters
     /// are /\[a-z][0-9\]-/.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub recognizer_id: ::prost::alloc::string::String,
     /// Required. The project and location where this Recognizer will be created.
     /// The expected format is `projects/{project}/locations/{location}`.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub parent: ::prost::alloc::string::String,
 }
 /// Represents the metadata of a long-running operation.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OperationMetadata {
     /// The time the operation was created.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub create_time: ::core::option::Option<::prost_types::Timestamp>,
     /// The time the operation was last updated.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub update_time: ::core::option::Option<::prost_types::Timestamp>,
     /// The resource path for the target of the operation.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub resource: ::prost::alloc::string::String,
     /// The method that triggered the operation.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub method: ::prost::alloc::string::String,
     /// The [KMS key
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#keys>) with which
     /// the content of the Operation is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-    #[prost(string, tag="6")]
+    #[prost(string, tag = "6")]
     pub kms_key_name: ::prost::alloc::string::String,
     /// The [KMS key version
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#key_versions>)
     /// with which content of the Operation is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}/cryptoKeyVersions/{crypto_key_version}`.
-    #[prost(string, tag="7")]
+    #[prost(string, tag = "7")]
     pub kms_key_version_name: ::prost::alloc::string::String,
     /// The percent progress of the Operation. Values can range from 0-100. If the
     /// value is 100, then the operation is finished.
-    #[prost(int32, tag="22")]
+    #[prost(int32, tag = "22")]
     pub progress_percent: i32,
     /// The request that spawned the Operation.
-    #[prost(oneof="operation_metadata::Request", tags="8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21")]
+    #[prost(
+        oneof = "operation_metadata::Request",
+        tags = "8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21"
+    )]
     pub request: ::core::option::Option<operation_metadata::Request>,
     /// Specific metadata per RPC.
-    #[prost(oneof="operation_metadata::Metadata", tags="23")]
+    #[prost(oneof = "operation_metadata::Metadata", tags = "23")]
     pub metadata: ::core::option::Option<operation_metadata::Metadata>,
 }
 /// Nested message and enum types in `OperationMetadata`.
 pub mod operation_metadata {
     /// The request that spawned the Operation.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Request {
         /// The BatchRecognizeRequest that spawned the Operation.
-        #[prost(message, tag="8")]
+        #[prost(message, tag = "8")]
         BatchRecognizeRequest(super::BatchRecognizeRequest),
         /// The CreateRecognizerRequest that spawned the Operation.
-        #[prost(message, tag="9")]
+        #[prost(message, tag = "9")]
         CreateRecognizerRequest(super::CreateRecognizerRequest),
         /// The UpdateRecognizerRequest that spawned the Operation.
-        #[prost(message, tag="10")]
+        #[prost(message, tag = "10")]
         UpdateRecognizerRequest(super::UpdateRecognizerRequest),
         /// The DeleteRecognizerRequest that spawned the Operation.
-        #[prost(message, tag="11")]
+        #[prost(message, tag = "11")]
         DeleteRecognizerRequest(super::DeleteRecognizerRequest),
         /// The UndeleteRecognizerRequest that spawned the Operation.
-        #[prost(message, tag="12")]
+        #[prost(message, tag = "12")]
         UndeleteRecognizerRequest(super::UndeleteRecognizerRequest),
         /// The CreateCustomClassRequest that spawned the Operation.
-        #[prost(message, tag="13")]
+        #[prost(message, tag = "13")]
         CreateCustomClassRequest(super::CreateCustomClassRequest),
         /// The UpdateCustomClassRequest that spawned the Operation.
-        #[prost(message, tag="14")]
+        #[prost(message, tag = "14")]
         UpdateCustomClassRequest(super::UpdateCustomClassRequest),
         /// The DeleteCustomClassRequest that spawned the Operation.
-        #[prost(message, tag="15")]
+        #[prost(message, tag = "15")]
         DeleteCustomClassRequest(super::DeleteCustomClassRequest),
         /// The UndeleteCustomClassRequest that spawned the Operation.
-        #[prost(message, tag="16")]
+        #[prost(message, tag = "16")]
         UndeleteCustomClassRequest(super::UndeleteCustomClassRequest),
         /// The CreatePhraseSetRequest that spawned the Operation.
-        #[prost(message, tag="17")]
+        #[prost(message, tag = "17")]
         CreatePhraseSetRequest(super::CreatePhraseSetRequest),
         /// The UpdatePhraseSetRequest that spawned the Operation.
-        #[prost(message, tag="18")]
+        #[prost(message, tag = "18")]
         UpdatePhraseSetRequest(super::UpdatePhraseSetRequest),
         /// The DeletePhraseSetRequest that spawned the Operation.
-        #[prost(message, tag="19")]
+        #[prost(message, tag = "19")]
         DeletePhraseSetRequest(super::DeletePhraseSetRequest),
         /// The UndeletePhraseSetRequest that spawned the Operation.
-        #[prost(message, tag="20")]
+        #[prost(message, tag = "20")]
         UndeletePhraseSetRequest(super::UndeletePhraseSetRequest),
         /// The UpdateConfigRequest that spawned the Operation.
-        #[prost(message, tag="21")]
+        #[prost(message, tag = "21")]
         UpdateConfigRequest(super::UpdateConfigRequest),
     }
     /// Specific metadata per RPC.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Metadata {
         /// Metadata specific to the BatchRecognize method.
-        #[prost(message, tag="23")]
+        #[prost(message, tag = "23")]
         BatchRecognizeMetadata(super::BatchRecognizeMetadata),
     }
 }
 /// Request message for the
 /// \[ListRecognizers][google.cloud.speech.v2.Speech.ListRecognizers\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListRecognizersRequest {
     /// Required. The project and location of Recognizers to list. The expected
     /// format is `projects/{project}/locations/{location}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub parent: ::prost::alloc::string::String,
     /// The maximum number of Recognizers to return. The service may return fewer
     /// than this value. If unspecified, at most 5 Recognizers will be returned.
     /// The maximum value is 100; values above 100 will be coerced to 100.
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     pub page_size: i32,
     /// A page token, received from a previous
     /// \[ListRecognizers][google.cloud.speech.v2.Speech.ListRecognizers\] call.
@@ -135,108 +143,114 @@ pub struct ListRecognizersRequest {
     /// When paginating, all other parameters provided to
     /// \[ListRecognizers][google.cloud.speech.v2.Speech.ListRecognizers\] must match
     /// the call that provided the page token.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub page_token: ::prost::alloc::string::String,
     /// Whether, or not, to show resources that have been deleted.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub show_deleted: bool,
 }
 /// Response message for the
 /// \[ListRecognizers][google.cloud.speech.v2.Speech.ListRecognizers\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListRecognizersResponse {
     /// The list of requested Recognizers.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub recognizers: ::prost::alloc::vec::Vec<Recognizer>,
     /// A token, which can be sent as
     /// \[page_token][google.cloud.speech.v2.ListRecognizersRequest.page_token\] to
     /// retrieve the next page. If this field is omitted, there are no subsequent
     /// pages. This token expires after 72 hours.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub next_page_token: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[GetRecognizer][google.cloud.speech.v2.Speech.GetRecognizer\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetRecognizerRequest {
     /// Required. The name of the Recognizer to retrieve. The expected format is
     /// `projects/{project}/locations/{location}/recognizers/{recognizer}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UpdateRecognizer][google.cloud.speech.v2.Speech.UpdateRecognizer\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateRecognizerRequest {
     /// Required. The Recognizer to update.
     ///
     /// The Recognizer's `name` field is used to identify the Recognizer to update.
     /// Format: `projects/{project}/locations/{location}/recognizers/{recognizer}`.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub recognizer: ::core::option::Option<Recognizer>,
     /// The list of fields to update. If empty, all non-default valued fields are
     /// considered for update. Use `*` to update the entire Recognizer resource.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub update_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// If set, validate the request and preview the updated Recognizer, but do not
     /// actually update it.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub validate_only: bool,
 }
 /// Request message for the
 /// \[DeleteRecognizer][google.cloud.speech.v2.Speech.DeleteRecognizer\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteRecognizerRequest {
     /// Required. The name of the Recognizer to delete.
     /// Format: `projects/{project}/locations/{location}/recognizers/{recognizer}`
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// If set, validate the request and preview the deleted Recognizer, but do not
     /// actually delete it.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub validate_only: bool,
     /// If set to true, and the Recognizer is not found, the request will succeed
     /// and  be a no-op (no Operation is recorded in this case).
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub allow_missing: bool,
     /// This checksum is computed by the server based on the value of other
     /// fields. This may be sent on update, undelete, and delete requests to ensure
     /// the client has an up-to-date value before proceeding.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub etag: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UndeleteRecognizer][google.cloud.speech.v2.Speech.UndeleteRecognizer\]
 /// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UndeleteRecognizerRequest {
     /// Required. The name of the Recognizer to undelete.
     /// Format: `projects/{project}/locations/{location}/recognizers/{recognizer}`
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// If set, validate the request and preview the undeleted Recognizer, but do
     /// not actually undelete it.
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub validate_only: bool,
     /// This checksum is computed by the server based on the value of other
     /// fields. This may be sent on update, undelete, and delete requests to ensure
     /// the client has an up-to-date value before proceeding.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub etag: ::prost::alloc::string::String,
 }
 /// A Recognizer message. Stores recognition configuration and metadata.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Recognizer {
     /// Output only. Identifier. The resource name of the Recognizer.
     /// Format: `projects/{project}/locations/{location}/recognizers/{recognizer}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// Output only. System-assigned unique identifier for the Recognizer.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub uid: ::prost::alloc::string::String,
     /// User-settable, human-readable name for the Recognizer. Must be 63
     /// characters or less.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub display_name: ::prost::alloc::string::String,
     /// Optional. This field is now deprecated. Prefer the
     /// \[`model`][google.cloud.speech.v2.RecognitionConfig.model\] field in the
@@ -252,7 +266,7 @@ pub struct Recognizer {
     /// Supported
     /// Models](<https://cloud.google.com/speech-to-text/v2/docs/speech-to-text-supported-languages>).
     #[deprecated]
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub model: ::prost::alloc::string::String,
     /// Optional. This field is now deprecated. Prefer the
     /// \[`language_codes`][google.cloud.speech.v2.RecognitionConfig.language_codes\]
@@ -272,60 +286,73 @@ pub struct Recognizer {
     /// stored in normalized BCP-47 form. For example, "en-us" is stored as
     /// "en-US".
     #[deprecated]
-    #[prost(string, repeated, tag="17")]
+    #[prost(string, repeated, tag = "17")]
     pub language_codes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Default configuration to use for requests with this Recognizer.
     /// This can be overwritten by inline configuration in the
     /// \[RecognizeRequest.config][google.cloud.speech.v2.RecognizeRequest.config\]
     /// field.
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub default_recognition_config: ::core::option::Option<RecognitionConfig>,
     /// Allows users to store small amounts of arbitrary data.
     /// Both the key and the value must be 63 characters or less each.
     /// At most 100 annotations.
-    #[prost(map="string, string", tag="7")]
-    pub annotations: ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    #[prost(map = "string, string", tag = "7")]
+    pub annotations: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        ::prost::alloc::string::String,
+    >,
     /// Output only. The Recognizer lifecycle state.
-    #[prost(enumeration="recognizer::State", tag="8")]
+    #[prost(enumeration = "recognizer::State", tag = "8")]
     pub state: i32,
     /// Output only. Creation time.
-    #[prost(message, optional, tag="9")]
+    #[prost(message, optional, tag = "9")]
     pub create_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The most recent time this Recognizer was modified.
-    #[prost(message, optional, tag="10")]
+    #[prost(message, optional, tag = "10")]
     pub update_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The time at which this Recognizer was requested for deletion.
-    #[prost(message, optional, tag="11")]
+    #[prost(message, optional, tag = "11")]
     pub delete_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The time at which this Recognizer will be purged.
-    #[prost(message, optional, tag="14")]
+    #[prost(message, optional, tag = "14")]
     pub expire_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. This checksum is computed by the server based on the value of
     /// other fields. This may be sent on update, undelete, and delete requests to
     /// ensure the client has an up-to-date value before proceeding.
-    #[prost(string, tag="12")]
+    #[prost(string, tag = "12")]
     pub etag: ::prost::alloc::string::String,
     /// Output only. Whether or not this Recognizer is in the process of being
     /// updated.
-    #[prost(bool, tag="13")]
+    #[prost(bool, tag = "13")]
     pub reconciling: bool,
     /// Output only. The [KMS key
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#keys>) with which
     /// the Recognizer is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-    #[prost(string, tag="15")]
+    #[prost(string, tag = "15")]
     pub kms_key_name: ::prost::alloc::string::String,
     /// Output only. The [KMS key version
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#key_versions>)
     /// with which the Recognizer is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}/cryptoKeyVersions/{crypto_key_version}`.
-    #[prost(string, tag="16")]
+    #[prost(string, tag = "16")]
     pub kms_key_version_name: ::prost::alloc::string::String,
 }
 /// Nested message and enum types in `Recognizer`.
 pub mod recognizer {
     /// Set of states that define the lifecycle of a Recognizer.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum State {
         /// The default value. This value is used if the state is omitted.
@@ -345,6 +372,15 @@ pub mod recognizer {
                 State::Unspecified => "STATE_UNSPECIFIED",
                 State::Active => "ACTIVE",
                 State::Deleted => "DELETED",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "STATE_UNSPECIFIED" => Some(Self::Unspecified),
+                "ACTIVE" => Some(Self::Active),
+                "DELETED" => Some(Self::Deleted),
+                _ => None,
             }
         }
     }
@@ -375,14 +411,15 @@ pub mod recognizer {
 /// * M4A_AAC: AAC audio frames in an M4A container.
 ///
 /// * MOV_AAC: AAC audio frames in an MOV container.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AutoDetectDecodingConfig {
-}
+pub struct AutoDetectDecodingConfig {}
 /// Explicitly specified decoding parameters.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExplicitDecodingConfig {
     /// Required. Encoding of the audio data sent for recognition.
-    #[prost(enumeration="explicit_decoding_config::AudioEncoding", tag="1")]
+    #[prost(enumeration = "explicit_decoding_config::AudioEncoding", tag = "1")]
     pub encoding: i32,
     /// Optional. Sample rate in Hertz of the audio data sent for recognition.
     /// Valid values are: 8000-48000, and 16000 is optimal. For best results, set
@@ -390,20 +427,30 @@ pub struct ExplicitDecodingConfig {
     /// use the native sample rate of the audio source (instead of resampling).
     /// Note that this field is marked as OPTIONAL for backward compatibility
     /// reasons. It is (and has always been) effectively REQUIRED.
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     pub sample_rate_hertz: i32,
     /// Optional. Number of channels present in the audio data sent for
     /// recognition. Note that this field is marked as OPTIONAL for backward
     /// compatibility reasons. It is (and has always been) effectively REQUIRED.
     ///
     /// The maximum allowed value is 8.
-    #[prost(int32, tag="3")]
+    #[prost(int32, tag = "3")]
     pub audio_channel_count: i32,
 }
 /// Nested message and enum types in `ExplicitDecodingConfig`.
 pub mod explicit_decoding_config {
     /// Supported audio data encodings.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum AudioEncoding {
         /// Default value. This value is unused.
@@ -455,86 +502,118 @@ pub mod explicit_decoding_config {
                 AudioEncoding::MovAac => "MOV_AAC",
             }
         }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "AUDIO_ENCODING_UNSPECIFIED" => Some(Self::Unspecified),
+                "LINEAR16" => Some(Self::Linear16),
+                "MULAW" => Some(Self::Mulaw),
+                "ALAW" => Some(Self::Alaw),
+                "AMR" => Some(Self::Amr),
+                "AMR_WB" => Some(Self::AmrWb),
+                "FLAC" => Some(Self::Flac),
+                "MP3" => Some(Self::Mp3),
+                "OGG_OPUS" => Some(Self::OggOpus),
+                "WEBM_OPUS" => Some(Self::WebmOpus),
+                "MP4_AAC" => Some(Self::Mp4Aac),
+                "M4A_AAC" => Some(Self::M4aAac),
+                "MOV_AAC" => Some(Self::MovAac),
+                _ => None,
+            }
+        }
     }
 }
 /// Configuration to enable speaker diarization.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SpeakerDiarizationConfig {
     /// Optional. The system automatically determines the number of speakers. This
     /// value is not currently used.
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     pub min_speaker_count: i32,
     /// Optional. The system automatically determines the number of speakers. This
     /// value is not currently used.
-    #[prost(int32, tag="3")]
+    #[prost(int32, tag = "3")]
     pub max_speaker_count: i32,
 }
 /// Configuration to enable custom prompt in chirp3.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CustomPromptConfig {
     /// Optional. The custom instructions to override the existing instructions for
     /// chirp3.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub custom_prompt: ::prost::alloc::string::String,
 }
 /// Available recognition features.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RecognitionFeatures {
     /// If set to `true`, the server will attempt to filter out profanities,
     /// replacing all but the initial character in each filtered word with
     /// asterisks, for instance, "f***". If set to `false` or omitted, profanities
     /// won't be filtered out.
-    #[prost(bool, tag="1")]
+    #[prost(bool, tag = "1")]
     pub profanity_filter: bool,
     /// If `true`, the top result includes a list of words and the start and end
     /// time offsets (timestamps) for those words. If `false`, no word-level time
     /// offset information is returned. The default is `false`.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub enable_word_time_offsets: bool,
     /// If `true`, the top result includes a list of words and the confidence for
     /// those words. If `false`, no word-level confidence information is returned.
     /// The default is `false`.
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub enable_word_confidence: bool,
     /// If `true`, adds punctuation to recognition result hypotheses. This feature
     /// is only available in select languages. The default `false` value does not
     /// add punctuation to result hypotheses.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub enable_automatic_punctuation: bool,
     /// The spoken punctuation behavior for the call. If `true`, replaces spoken
     /// punctuation with the corresponding symbols in the request. For example,
     /// "how are you question mark" becomes "how are you?". See
     /// <https://cloud.google.com/speech-to-text/docs/spoken-punctuation> for
     /// support. If `false`, spoken punctuation is not replaced.
-    #[prost(bool, tag="14")]
+    #[prost(bool, tag = "14")]
     pub enable_spoken_punctuation: bool,
     /// The spoken emoji behavior for the call. If `true`, adds spoken emoji
     /// formatting for the request. This will replace spoken emojis with the
     /// corresponding Unicode symbols in the final transcript. If `false`, spoken
     /// emojis are not replaced.
-    #[prost(bool, tag="15")]
+    #[prost(bool, tag = "15")]
     pub enable_spoken_emojis: bool,
     /// Mode for recognizing multi-channel audio.
-    #[prost(enumeration="recognition_features::MultiChannelMode", tag="17")]
+    #[prost(enumeration = "recognition_features::MultiChannelMode", tag = "17")]
     pub multi_channel_mode: i32,
     /// Configuration to enable speaker diarization. To enable diarization, set
     /// this field to an empty SpeakerDiarizationConfig message.
-    #[prost(message, optional, tag="9")]
+    #[prost(message, optional, tag = "9")]
     pub diarization_config: ::core::option::Option<SpeakerDiarizationConfig>,
     /// Maximum number of recognition hypotheses to be returned.
     /// The server may return fewer than `max_alternatives`.
     /// Valid values are `0`-`30`. A value of `0` or `1` will return a maximum of
     /// one. If omitted, will return a maximum of one.
-    #[prost(int32, tag="16")]
+    #[prost(int32, tag = "16")]
     pub max_alternatives: i32,
     /// Optional. Configuration to enable custom prompt for chirp3.
-    #[prost(message, optional, tag="18")]
+    #[prost(message, optional, tag = "18")]
     pub custom_prompt_config: ::core::option::Option<CustomPromptConfig>,
 }
 /// Nested message and enum types in `RecognitionFeatures`.
 pub mod recognition_features {
     /// Options for how to recognize multi-channel audio.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum MultiChannelMode {
         /// Default value for the multi-channel mode. If the audio contains
@@ -554,7 +633,19 @@ pub mod recognition_features {
         pub fn as_str_name(&self) -> &'static str {
             match self {
                 MultiChannelMode::Unspecified => "MULTI_CHANNEL_MODE_UNSPECIFIED",
-                MultiChannelMode::SeparateRecognitionPerChannel => "SEPARATE_RECOGNITION_PER_CHANNEL",
+                MultiChannelMode::SeparateRecognitionPerChannel => {
+                    "SEPARATE_RECOGNITION_PER_CHANNEL"
+                }
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "MULTI_CHANNEL_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+                "SEPARATE_RECOGNITION_PER_CHANNEL" => {
+                    Some(Self::SeparateRecognitionPerChannel)
+                }
+                _ => None,
             }
         }
     }
@@ -563,81 +654,88 @@ pub mod recognition_features {
 /// to automatically replace parts of the transcript with phrases of your
 /// choosing. For StreamingRecognize, this normalization only applies to stable
 /// partial transcripts (stability > 0.8) and final transcripts.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TranscriptNormalization {
     /// A list of replacement entries. We will perform replacement with one entry
     /// at a time. For example, the second entry in ["cat" => "dog", "mountain cat"
     /// => "mountain dog"] will never be applied because we will always process the
     /// first entry before it. At most 100 entries.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub entries: ::prost::alloc::vec::Vec<transcript_normalization::Entry>,
 }
 /// Nested message and enum types in `TranscriptNormalization`.
 pub mod transcript_normalization {
     /// A single replacement configuration.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Entry {
         /// What to replace. Max length is 100 characters.
-        #[prost(string, tag="1")]
+        #[prost(string, tag = "1")]
         pub search: ::prost::alloc::string::String,
         /// What to replace with. Max length is 100 characters.
-        #[prost(string, tag="2")]
+        #[prost(string, tag = "2")]
         pub replace: ::prost::alloc::string::String,
         /// Whether the search is case sensitive.
-        #[prost(bool, tag="3")]
+        #[prost(bool, tag = "3")]
         pub case_sensitive: bool,
     }
 }
 /// Translation configuration. Use to translate the given audio into text for the
 /// desired language.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TranslationConfig {
     /// Required. The language code to translate to.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub target_language: ::prost::alloc::string::String,
 }
 /// Provides "hints" to the speech recognizer to favor specific words and phrases
 /// in the results. PhraseSets can be specified as an inline resource, or a
 /// reference to an existing PhraseSet resource.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SpeechAdaptation {
     /// A list of inline or referenced PhraseSets.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub phrase_sets: ::prost::alloc::vec::Vec<speech_adaptation::AdaptationPhraseSet>,
     /// A list of inline CustomClasses. Existing CustomClass resources can be
     /// referenced directly in a PhraseSet.
-    #[prost(message, repeated, tag="2")]
+    #[prost(message, repeated, tag = "2")]
     pub custom_classes: ::prost::alloc::vec::Vec<CustomClass>,
 }
 /// Nested message and enum types in `SpeechAdaptation`.
 pub mod speech_adaptation {
     /// A biasing PhraseSet, which can be either a string referencing the name of
     /// an existing PhraseSets resource, or an inline definition of a PhraseSet.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct AdaptationPhraseSet {
-        #[prost(oneof="adaptation_phrase_set::Value", tags="1, 2")]
+        #[prost(oneof = "adaptation_phrase_set::Value", tags = "1, 2")]
         pub value: ::core::option::Option<adaptation_phrase_set::Value>,
     }
     /// Nested message and enum types in `AdaptationPhraseSet`.
     pub mod adaptation_phrase_set {
+        #[allow(clippy::derive_partial_eq_without_eq)]
         #[derive(Clone, PartialEq, ::prost::Oneof)]
         pub enum Value {
             /// The name of an existing PhraseSet resource. The user must have read
             /// access to the resource and it must not be deleted.
-            #[prost(string, tag="1")]
+            #[prost(string, tag = "1")]
             PhraseSet(::prost::alloc::string::String),
             /// An inline defined PhraseSet.
-            #[prost(message, tag="2")]
+            #[prost(message, tag = "2")]
             InlinePhraseSet(super::super::PhraseSet),
         }
     }
 }
 /// Denoiser config. May not be supported for all models and may
 /// have no effect.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DenoiserConfig {
     /// Denoise audio before sending to the transcription model.
-    #[prost(bool, tag="1")]
+    #[prost(bool, tag = "1")]
     pub denoise_audio: bool,
     /// Signal-to-Noise Ratio (SNR) threshold for the denoiser. Here SNR means the
     /// loudness of the speech signal. Audio with an SNR below this threshold,
@@ -645,11 +743,12 @@ pub struct DenoiserConfig {
     /// transcription model.
     ///
     /// If snr_threshold=0, no filtering will be applied.
-    #[prost(float, tag="2")]
+    #[prost(float, tag = "2")]
     pub snr_threshold: f32,
 }
 /// Provides information to the Recognizer that specifies how to process the
 /// recognition request.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RecognitionConfig {
     /// Optional. Which model to use for recognition requests. Select the model
@@ -661,7 +760,7 @@ pub struct RecognitionConfig {
     /// and the models supported in each region can be found in the [Table Of
     /// Supported
     /// Models](<https://cloud.google.com/speech-to-text/v2/docs/speech-to-text-supported-languages>).
-    #[prost(string, tag="9")]
+    #[prost(string, tag = "9")]
     pub model: ::prost::alloc::string::String,
     /// Optional. The language of the supplied audio as a
     /// \[BCP-47\](<https://www.rfc-editor.org/rfc/bcp/bcp47.txt>) language tag.
@@ -674,45 +773,46 @@ pub struct RecognitionConfig {
     /// If additional languages are provided, recognition result will contain
     /// recognition in the most likely language detected. The recognition result
     /// will include the language tag of the language detected in the audio.
-    #[prost(string, repeated, tag="10")]
+    #[prost(string, repeated, tag = "10")]
     pub language_codes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Speech recognition features to enable.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub features: ::core::option::Option<RecognitionFeatures>,
     /// Speech adaptation context that weights recognizer predictions for specific
     /// words and phrases.
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub adaptation: ::core::option::Option<SpeechAdaptation>,
     /// Optional. Use transcription normalization to automatically replace parts of
     /// the transcript with phrases of your choosing. For StreamingRecognize, this
     /// normalization only applies to stable partial transcripts (stability > 0.8)
     /// and final transcripts.
-    #[prost(message, optional, tag="11")]
+    #[prost(message, optional, tag = "11")]
     pub transcript_normalization: ::core::option::Option<TranscriptNormalization>,
     /// Optional. Optional configuration used to automatically run translation on
     /// the given audio to the desired language for supported models.
-    #[prost(message, optional, tag="15")]
+    #[prost(message, optional, tag = "15")]
     pub translation_config: ::core::option::Option<TranslationConfig>,
     /// Optional. Optional denoiser config. May not be supported for all models
     /// and may have no effect.
-    #[prost(message, optional, tag="16")]
+    #[prost(message, optional, tag = "16")]
     pub denoiser_config: ::core::option::Option<DenoiserConfig>,
     /// Decoding parameters for audio being sent for recognition.
-    #[prost(oneof="recognition_config::DecodingConfig", tags="7, 8")]
+    #[prost(oneof = "recognition_config::DecodingConfig", tags = "7, 8")]
     pub decoding_config: ::core::option::Option<recognition_config::DecodingConfig>,
 }
 /// Nested message and enum types in `RecognitionConfig`.
 pub mod recognition_config {
     /// Decoding parameters for audio being sent for recognition.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum DecodingConfig {
         /// Automatically detect decoding parameters.
         /// Preferred for supported formats.
-        #[prost(message, tag="7")]
+        #[prost(message, tag = "7")]
         AutoDecodingConfig(super::AutoDetectDecodingConfig),
         /// Explicitly specified decoding parameters.
         /// Required if using headerless PCM audio (linear16, mulaw, alaw).
-        #[prost(message, tag="8")]
+        #[prost(message, tag = "8")]
         ExplicitDecodingConfig(super::ExplicitDecodingConfig),
     }
 }
@@ -721,13 +821,14 @@ pub mod recognition_config {
 /// `content` or `uri` must be supplied. Supplying both or neither returns
 /// \[INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT\]. See [content
 /// limits](<https://cloud.google.com/speech-to-text/quotas#content>).
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RecognizeRequest {
     /// Required. The name of the Recognizer to use during recognition. The
     /// expected format is
     /// `projects/{project}/locations/{location}/recognizers/{recognizer}`. The
     /// {recognizer} segment may be set to `_` to use an empty implicit Recognizer.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub recognizer: ::prost::alloc::string::String,
     /// Features and audio metadata to use for the Automatic Speech Recognition.
     /// This field in combination with the
@@ -735,7 +836,7 @@ pub struct RecognizeRequest {
     /// can be used to override parts of the
     /// \[default_recognition_config][google.cloud.speech.v2.Recognizer.default_recognition_config\]
     /// of the Recognizer resource.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub config: ::core::option::Option<RecognitionConfig>,
     /// The list of fields in
     /// \[config][google.cloud.speech.v2.RecognizeRequest.config\] that override the
@@ -750,24 +851,25 @@ pub struct RecognizeRequest {
     /// \[config][google.cloud.speech.v2.RecognizeRequest.config\] completely
     /// overrides and replaces the config in the recognizer for this recognition
     /// request.
-    #[prost(message, optional, tag="8")]
+    #[prost(message, optional, tag = "8")]
     pub config_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// The audio source, which is either inline content or a Google Cloud
     /// Storage URI.
-    #[prost(oneof="recognize_request::AudioSource", tags="5, 6")]
+    #[prost(oneof = "recognize_request::AudioSource", tags = "5, 6")]
     pub audio_source: ::core::option::Option<recognize_request::AudioSource>,
 }
 /// Nested message and enum types in `RecognizeRequest`.
 pub mod recognize_request {
     /// The audio source, which is either inline content or a Google Cloud
     /// Storage URI.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum AudioSource {
         /// The audio data bytes encoded as specified in
         /// \[RecognitionConfig][google.cloud.speech.v2.RecognitionConfig\]. As
         /// with all bytes fields, proto buffers use a pure binary representation,
         /// whereas JSON representations use base64.
-        #[prost(bytes, tag="5")]
+        #[prost(bytes, tag = "5")]
         Content(::prost::alloc::vec::Vec<u8>),
         /// URI that points to a file that contains audio data bytes as specified in
         /// \[RecognitionConfig][google.cloud.speech.v2.RecognitionConfig\]. The file
@@ -777,29 +879,31 @@ pub mod recognize_request {
         /// \[INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT\]). For more
         /// information, see [Request
         /// URIs](<https://cloud.google.com/storage/docs/reference-uris>).
-        #[prost(string, tag="6")]
+        #[prost(string, tag = "6")]
         Uri(::prost::alloc::string::String),
     }
 }
 /// Metadata about the recognition request and response.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RecognitionResponseMetadata {
     /// Global request identifier auto-generated by the API.
-    #[prost(string, tag="9")]
+    #[prost(string, tag = "9")]
     pub request_id: ::prost::alloc::string::String,
     /// When available, billed audio seconds for the corresponding request.
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub total_billed_duration: ::core::option::Option<::prost_types::Duration>,
     /// Optional. Output only. Provides the prompt used for the recognition
     /// request.
-    #[prost(string, optional, tag="10")]
+    #[prost(string, optional, tag = "10")]
     pub prompt: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Alternative hypotheses (a.k.a. n-best list).
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SpeechRecognitionAlternative {
     /// Transcript text representing the words that the user spoke.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub transcript: ::prost::alloc::string::String,
     /// The confidence estimate between 0.0 and 1.0. A higher number
     /// indicates an estimated greater likelihood that the recognized words are
@@ -809,16 +913,17 @@ pub struct SpeechRecognitionAlternative {
     /// set to `true`. This field is not guaranteed to be accurate and users should
     /// not rely on it to be always provided. The default of 0.0 is a sentinel
     /// value indicating `confidence` was not set.
-    #[prost(float, tag="2")]
+    #[prost(float, tag = "2")]
     pub confidence: f32,
     /// A list of word-specific information for each recognized word.
     /// When the
     /// \[SpeakerDiarizationConfig][google.cloud.speech.v2.SpeakerDiarizationConfig\]
     /// is set, you will see all the words from the beginning of the audio.
-    #[prost(message, repeated, tag="3")]
+    #[prost(message, repeated, tag = "3")]
     pub words: ::prost::alloc::vec::Vec<WordInfo>,
 }
 /// Word-specific information for recognized words.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct WordInfo {
     /// Time offset relative to the beginning of the audio,
@@ -827,7 +932,7 @@ pub struct WordInfo {
     /// \[enable_word_time_offsets][google.cloud.speech.v2.RecognitionFeatures.enable_word_time_offsets\]
     /// is `true` and only in the top hypothesis. This is an experimental feature
     /// and the accuracy of the time offset can vary.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub start_offset: ::core::option::Option<::prost_types::Duration>,
     /// Time offset relative to the beginning of the audio,
     /// and corresponding to the end of the spoken word.
@@ -835,10 +940,10 @@ pub struct WordInfo {
     /// \[enable_word_time_offsets][google.cloud.speech.v2.RecognitionFeatures.enable_word_time_offsets\]
     /// is `true` and only in the top hypothesis. This is an experimental feature
     /// and the accuracy of the time offset can vary.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub end_offset: ::core::option::Option<::prost_types::Duration>,
     /// The word corresponding to this set of information.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub word: ::prost::alloc::string::String,
     /// The confidence estimate between 0.0 and 1.0. A higher number
     /// indicates an estimated greater likelihood that the recognized words are
@@ -848,93 +953,112 @@ pub struct WordInfo {
     /// set to `true`. This field is not guaranteed to be accurate and users should
     /// not rely on it to be always provided. The default of 0.0 is a sentinel
     /// value indicating `confidence` was not set.
-    #[prost(float, tag="4")]
+    #[prost(float, tag = "4")]
     pub confidence: f32,
     /// A distinct label is assigned for every speaker within the audio. This field
     /// specifies which one of those speakers was detected to have spoken this
     /// word. `speaker_label` is set if
     /// \[SpeakerDiarizationConfig][google.cloud.speech.v2.SpeakerDiarizationConfig\]
     /// is given and only in the top alternative.
-    #[prost(string, tag="6")]
+    #[prost(string, tag = "6")]
     pub speaker_label: ::prost::alloc::string::String,
 }
 /// A speech recognition result corresponding to a portion of the audio.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SpeechRecognitionResult {
     /// May contain one or more recognition hypotheses. These alternatives are
     /// ordered in terms of accuracy, with the top (first) alternative being the
     /// most probable, as ranked by the recognizer.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub alternatives: ::prost::alloc::vec::Vec<SpeechRecognitionAlternative>,
     /// For multi-channel audio, this is the channel number corresponding to the
     /// recognized result for the audio from that channel.
     /// For `audio_channel_count` = `N`, its output values can range from `1` to
     /// `N`.
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     pub channel_tag: i32,
     /// Time offset of the end of this result relative to the beginning of the
     /// audio.
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub result_end_offset: ::core::option::Option<::prost_types::Duration>,
     /// Output only. The \[BCP-47\](<https://www.rfc-editor.org/rfc/bcp/bcp47.txt>)
     /// language tag of the language in this result. This language code was
     /// detected to have the most likelihood of being spoken in the audio.
-    #[prost(string, tag="5")]
+    #[prost(string, tag = "5")]
     pub language_code: ::prost::alloc::string::String,
 }
 /// Response message for the
 /// \[Recognize][google.cloud.speech.v2.Speech.Recognize\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RecognizeResponse {
     /// Sequential list of transcription results corresponding to sequential
     /// portions of audio.
-    #[prost(message, repeated, tag="3")]
+    #[prost(message, repeated, tag = "3")]
     pub results: ::prost::alloc::vec::Vec<SpeechRecognitionResult>,
     /// Metadata about the recognition.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub metadata: ::core::option::Option<RecognitionResponseMetadata>,
 }
 /// Available recognition features specific to streaming recognition requests.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamingRecognitionFeatures {
     /// If `true`, responses with voice activity speech events will be returned as
     /// they are detected.
-    #[prost(bool, tag="1")]
+    #[prost(bool, tag = "1")]
     pub enable_voice_activity_events: bool,
     /// Whether or not to stream interim results to the client. If set to true,
     /// interim results will be streamed to the client. Otherwise, only the final
     /// response will be streamed back.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub interim_results: bool,
     /// If set, the server will automatically close the stream after the specified
     /// duration has elapsed after the last VOICE_ACTIVITY speech event has been
     /// sent. The field `voice_activity_events` must also be set to true.
-    #[prost(message, optional, tag="3")]
-    pub voice_activity_timeout: ::core::option::Option<streaming_recognition_features::VoiceActivityTimeout>,
+    #[prost(message, optional, tag = "3")]
+    pub voice_activity_timeout: ::core::option::Option<
+        streaming_recognition_features::VoiceActivityTimeout,
+    >,
     /// Optional. Endpointing sensitivity for this stream.
-    #[prost(enumeration="streaming_recognition_features::EndpointingSensitivity", tag="8")]
+    #[prost(
+        enumeration = "streaming_recognition_features::EndpointingSensitivity",
+        tag = "8"
+    )]
     pub endpointing_sensitivity: i32,
 }
 /// Nested message and enum types in `StreamingRecognitionFeatures`.
 pub mod streaming_recognition_features {
     /// Events that a timeout can be set on for voice activity.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct VoiceActivityTimeout {
         /// Duration to timeout the stream if no speech begins. If this is set and
         /// no speech is detected in this duration at the start of the stream, the
         /// server will close the stream.
-        #[prost(message, optional, tag="1")]
+        #[prost(message, optional, tag = "1")]
         pub speech_start_timeout: ::core::option::Option<::prost_types::Duration>,
         /// Duration to timeout the stream after speech ends. If this is set and no
         /// speech is detected in this duration after speech was detected, the server
         /// will close the stream.
-        #[prost(message, optional, tag="2")]
+        #[prost(message, optional, tag = "2")]
         pub speech_end_timeout: ::core::option::Option<::prost_types::Duration>,
     }
     /// Endpointing sensitivity is intended for applications that want to minimize
     /// result latency, possibly at the expense of quality. Some utterances may be
     /// broken up into multiple fragments.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum EndpointingSensitivity {
         /// If no value is specified, the values for
@@ -958,15 +1082,30 @@ pub mod streaming_recognition_features {
         /// (if the ProtoBuf definition does not change) and safe for programmatic use.
         pub fn as_str_name(&self) -> &'static str {
             match self {
-                EndpointingSensitivity::Unspecified => "ENDPOINTING_SENSITIVITY_UNSPECIFIED",
+                EndpointingSensitivity::Unspecified => {
+                    "ENDPOINTING_SENSITIVITY_UNSPECIFIED"
+                }
                 EndpointingSensitivity::Standard => "ENDPOINTING_SENSITIVITY_STANDARD",
-                EndpointingSensitivity::Supershort => "ENDPOINTING_SENSITIVITY_SUPERSHORT",
+                EndpointingSensitivity::Supershort => {
+                    "ENDPOINTING_SENSITIVITY_SUPERSHORT"
+                }
                 EndpointingSensitivity::Short => "ENDPOINTING_SENSITIVITY_SHORT",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "ENDPOINTING_SENSITIVITY_UNSPECIFIED" => Some(Self::Unspecified),
+                "ENDPOINTING_SENSITIVITY_STANDARD" => Some(Self::Standard),
+                "ENDPOINTING_SENSITIVITY_SUPERSHORT" => Some(Self::Supershort),
+                "ENDPOINTING_SENSITIVITY_SHORT" => Some(Self::Short),
+                _ => None,
             }
         }
     }
 }
 /// Provides configuration information for the StreamingRecognize request.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamingRecognitionConfig {
     /// Required. Features and audio metadata to use for the Automatic Speech
@@ -975,7 +1114,7 @@ pub struct StreamingRecognitionConfig {
     /// field can be used to override parts of the
     /// \[default_recognition_config][google.cloud.speech.v2.Recognizer.default_recognition_config\]
     /// of the Recognizer resource.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub config: ::core::option::Option<RecognitionConfig>,
     /// The list of fields in
     /// \[config][google.cloud.speech.v2.StreamingRecognitionConfig.config\] that
@@ -990,11 +1129,11 @@ pub struct StreamingRecognitionConfig {
     /// \[config][google.cloud.speech.v2.StreamingRecognitionConfig.config\]
     /// completely overrides and replaces the config in the recognizer for this
     /// recognition request.
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub config_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// Speech recognition features to enable specific to streaming audio
     /// recognition requests.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub streaming_features: ::core::option::Option<StreamingRecognitionFeatures>,
 }
 /// Request message for the
@@ -1017,42 +1156,47 @@ pub struct StreamingRecognitionConfig {
 /// contain \[audio][google.cloud.speech.v2.StreamingRecognizeRequest.audio\]. All
 /// subsequent messages must only have
 /// \[audio][google.cloud.speech.v2.StreamingRecognizeRequest.audio\] set.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamingRecognizeRequest {
     /// Required. The name of the Recognizer to use during recognition. The
     /// expected format is
     /// `projects/{project}/locations/{location}/recognizers/{recognizer}`. The
     /// {recognizer} segment may be set to `_` to use an empty implicit Recognizer.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub recognizer: ::prost::alloc::string::String,
-    #[prost(oneof="streaming_recognize_request::StreamingRequest", tags="6, 5")]
-    pub streaming_request: ::core::option::Option<streaming_recognize_request::StreamingRequest>,
+    #[prost(oneof = "streaming_recognize_request::StreamingRequest", tags = "6, 5")]
+    pub streaming_request: ::core::option::Option<
+        streaming_recognize_request::StreamingRequest,
+    >,
 }
 /// Nested message and enum types in `StreamingRecognizeRequest`.
 pub mod streaming_recognize_request {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamingRequest {
         /// StreamingRecognitionConfig to be used in this recognition attempt.
         /// If provided, it will override the default RecognitionConfig stored in the
         /// Recognizer.
-        #[prost(message, tag="6")]
+        #[prost(message, tag = "6")]
         StreamingConfig(super::StreamingRecognitionConfig),
         /// Inline audio bytes to be Recognized.
         /// Maximum size for this field is 15 KB per request.
-        #[prost(bytes, tag="5")]
+        #[prost(bytes, tag = "5")]
         Audio(::prost::alloc::vec::Vec<u8>),
     }
 }
 /// Request message for the
 /// \[BatchRecognize][google.cloud.speech.v2.Speech.BatchRecognize\]
 /// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeRequest {
     /// Required. The name of the Recognizer to use during recognition. The
     /// expected format is
     /// `projects/{project}/locations/{location}/recognizers/{recognizer}`. The
     /// {recognizer} segment may be set to `_` to use an empty implicit Recognizer.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub recognizer: ::prost::alloc::string::String,
     /// Features and audio metadata to use for the Automatic Speech Recognition.
     /// This field in combination with the
@@ -1060,7 +1204,7 @@ pub struct BatchRecognizeRequest {
     /// field can be used to override parts of the
     /// \[default_recognition_config][google.cloud.speech.v2.Recognizer.default_recognition_config\]
     /// of the Recognizer resource.
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub config: ::core::option::Option<RecognitionConfig>,
     /// The list of fields in
     /// \[config][google.cloud.speech.v2.BatchRecognizeRequest.config\] that override
@@ -1075,23 +1219,33 @@ pub struct BatchRecognizeRequest {
     /// \[config][google.cloud.speech.v2.BatchRecognizeRequest.config\] completely
     /// overrides and replaces the config in the recognizer for this recognition
     /// request.
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub config_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// Audio files with file metadata for ASR.
     /// The maximum number of files allowed to be specified is 15.
-    #[prost(message, repeated, tag="3")]
+    #[prost(message, repeated, tag = "3")]
     pub files: ::prost::alloc::vec::Vec<BatchRecognizeFileMetadata>,
     /// Configuration options for where to output the transcripts of each file.
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub recognition_output_config: ::core::option::Option<RecognitionOutputConfig>,
     /// Processing strategy to use for this request.
-    #[prost(enumeration="batch_recognize_request::ProcessingStrategy", tag="7")]
+    #[prost(enumeration = "batch_recognize_request::ProcessingStrategy", tag = "7")]
     pub processing_strategy: i32,
 }
 /// Nested message and enum types in `BatchRecognizeRequest`.
 pub mod batch_recognize_request {
     /// Possible processing strategies for batch requests.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum ProcessingStrategy {
         /// Default value for the processing strategy. The request is processed as
@@ -1112,155 +1266,176 @@ pub mod batch_recognize_request {
                 ProcessingStrategy::DynamicBatching => "DYNAMIC_BATCHING",
             }
         }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "PROCESSING_STRATEGY_UNSPECIFIED" => Some(Self::Unspecified),
+                "DYNAMIC_BATCHING" => Some(Self::DynamicBatching),
+                _ => None,
+            }
+        }
     }
 }
 /// Output configurations for Cloud Storage.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GcsOutputConfig {
     /// The Cloud Storage URI prefix with which recognition results will be
     /// written.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub uri: ::prost::alloc::string::String,
 }
 /// Output configurations for inline response.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InlineOutputConfig {
-}
+pub struct InlineOutputConfig {}
 /// Output configurations for serialized `BatchRecognizeResults` protos.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NativeOutputFileFormatConfig {
-}
+pub struct NativeOutputFileFormatConfig {}
 /// Output configurations for \[WebVTT\](<https://www.w3.org/TR/webvtt1/>) formatted
 /// subtitle file.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct VttOutputFileFormatConfig {
-}
+pub struct VttOutputFileFormatConfig {}
 /// Output configurations [SubRip
 /// Text](<https://www.matroska.org/technical/subtitles.html#srt-subtitles>)
 /// formatted subtitle file.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SrtOutputFileFormatConfig {
-}
+pub struct SrtOutputFileFormatConfig {}
 /// Configuration for the format of the results stored to `output`.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct OutputFormatConfig {
     /// Configuration for the native output format. If this field is set or if no
     /// other output format field is set, then transcripts will be written to the
     /// sink in the native format.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub native: ::core::option::Option<NativeOutputFileFormatConfig>,
     /// Configuration for the VTT output format. If this field is set, then
     /// transcripts will be written to the sink in the VTT format.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub vtt: ::core::option::Option<VttOutputFileFormatConfig>,
     /// Configuration for the SRT output format. If this field is set, then
     /// transcripts will be written to the sink in the SRT format.
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub srt: ::core::option::Option<SrtOutputFileFormatConfig>,
 }
 /// Configuration options for the output(s) of recognition.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RecognitionOutputConfig {
     /// Optional. Configuration for the format of the results stored to `output`.
     /// If unspecified transcripts will be written in the `NATIVE` format only.
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub output_format_config: ::core::option::Option<OutputFormatConfig>,
-    #[prost(oneof="recognition_output_config::Output", tags="1, 2")]
+    #[prost(oneof = "recognition_output_config::Output", tags = "1, 2")]
     pub output: ::core::option::Option<recognition_output_config::Output>,
 }
 /// Nested message and enum types in `RecognitionOutputConfig`.
 pub mod recognition_output_config {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Output {
         /// If this message is populated, recognition results are written to the
         /// provided Google Cloud Storage URI.
-        #[prost(message, tag="1")]
+        #[prost(message, tag = "1")]
         GcsOutputConfig(super::GcsOutputConfig),
         /// If this message is populated, recognition results are provided in the
         /// \[BatchRecognizeResponse][google.cloud.speech.v2.BatchRecognizeResponse\]
         /// message of the Operation when completed. This is only supported when
         /// calling \[BatchRecognize][google.cloud.speech.v2.Speech.BatchRecognize\]
         /// with just one audio file.
-        #[prost(message, tag="2")]
+        #[prost(message, tag = "2")]
         InlineResponseConfig(super::InlineOutputConfig),
     }
 }
 /// Response message for
 /// \[BatchRecognize][google.cloud.speech.v2.Speech.BatchRecognize\] that is
 /// packaged into a longrunning \[Operation][google.longrunning.Operation\].
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeResponse {
     /// Map from filename to the final result for that file.
-    #[prost(map="string, message", tag="1")]
-    pub results: ::std::collections::HashMap<::prost::alloc::string::String, BatchRecognizeFileResult>,
+    #[prost(map = "string, message", tag = "1")]
+    pub results: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        BatchRecognizeFileResult,
+    >,
     /// When available, billed audio seconds for the corresponding request.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub total_billed_duration: ::core::option::Option<::prost_types::Duration>,
 }
 /// Output type for Cloud Storage of BatchRecognize transcripts. Though this
 /// proto isn't returned in this API anywhere, the Cloud Storage transcripts will
 /// be this proto serialized and should be parsed as such.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeResults {
     /// Sequential list of transcription results corresponding to sequential
     /// portions of audio.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub results: ::prost::alloc::vec::Vec<SpeechRecognitionResult>,
     /// Metadata about the recognition.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub metadata: ::core::option::Option<RecognitionResponseMetadata>,
 }
 /// Final results written to Cloud Storage.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CloudStorageResult {
     /// The Cloud Storage URI to which recognition results were written.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub uri: ::prost::alloc::string::String,
     /// The Cloud Storage URI to which recognition results were written as VTT
     /// formatted captions. This is populated only when `VTT` output is requested.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub vtt_format_uri: ::prost::alloc::string::String,
     /// The Cloud Storage URI to which recognition results were written as SRT
     /// formatted captions. This is populated only when `SRT` output is requested.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub srt_format_uri: ::prost::alloc::string::String,
 }
 /// Final results returned inline in the recognition response.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InlineResult {
     /// The transcript for the audio file.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub transcript: ::core::option::Option<BatchRecognizeResults>,
     /// The transcript for the audio file as VTT formatted captions. This is
     /// populated only when `VTT` output is requested.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub vtt_captions: ::prost::alloc::string::String,
     /// The transcript for the audio file as SRT formatted captions. This is
     /// populated only when `SRT` output is requested.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub srt_captions: ::prost::alloc::string::String,
 }
 /// Final results for a single file.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeFileResult {
     /// Error if one was encountered.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub error: ::core::option::Option<super::super::super::rpc::Status>,
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub metadata: ::core::option::Option<RecognitionResponseMetadata>,
     /// Deprecated. Use `cloud_storage_result.native_format_uri` instead.
     #[deprecated]
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub uri: ::prost::alloc::string::String,
     /// Deprecated. Use `inline_result.transcript` instead.
     #[deprecated]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub transcript: ::core::option::Option<BatchRecognizeResults>,
-    #[prost(oneof="batch_recognize_file_result::Result", tags="5, 6")]
+    #[prost(oneof = "batch_recognize_file_result::Result", tags = "5, 6")]
     pub result: ::core::option::Option<batch_recognize_file_result::Result>,
 }
 /// Nested message and enum types in `BatchRecognizeFileResult`.
 pub mod batch_recognize_file_result {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Result {
         /// Recognition results written to Cloud Storage. This is
@@ -1268,39 +1443,45 @@ pub mod batch_recognize_file_result {
         /// \[GcsOutputConfig][google.cloud.speech.v2.GcsOutputConfig\] is set in
         /// the
         /// \[RecognitionOutputConfig][[google.cloud.speech.v2.RecognitionOutputConfig\].
-        #[prost(message, tag="5")]
+        #[prost(message, tag = "5")]
         CloudStorageResult(super::CloudStorageResult),
         /// Recognition results. This is populated only when
         /// \[InlineOutputConfig][google.cloud.speech.v2.InlineOutputConfig\] is set in
         /// the
         /// \[RecognitionOutputConfig][[google.cloud.speech.v2.RecognitionOutputConfig\].
-        #[prost(message, tag="6")]
+        #[prost(message, tag = "6")]
         InlineResult(super::InlineResult),
     }
 }
 /// Metadata about transcription for a single file (for example, progress
 /// percent).
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeTranscriptionMetadata {
     /// How much of the file has been transcribed so far.
-    #[prost(int32, tag="1")]
+    #[prost(int32, tag = "1")]
     pub progress_percent: i32,
     /// Error if one was encountered.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub error: ::core::option::Option<super::super::super::rpc::Status>,
     /// The Cloud Storage URI to which recognition results will be written.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub uri: ::prost::alloc::string::String,
 }
 /// Operation metadata for
 /// \[BatchRecognize][google.cloud.speech.v2.Speech.BatchRecognize\].
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeMetadata {
     /// Map from provided filename to the transcription metadata for that file.
-    #[prost(map="string, message", tag="1")]
-    pub transcription_metadata: ::std::collections::HashMap<::prost::alloc::string::String, BatchRecognizeTranscriptionMetadata>,
+    #[prost(map = "string, message", tag = "1")]
+    pub transcription_metadata: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        BatchRecognizeTranscriptionMetadata,
+    >,
 }
 /// Metadata about a single file in a batch for BatchRecognize.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BatchRecognizeFileMetadata {
     /// Features and audio metadata to use for the Automatic Speech Recognition.
@@ -1311,7 +1492,7 @@ pub struct BatchRecognizeFileMetadata {
     /// of the Recognizer resource as well as the
     /// \[config][google.cloud.speech.v2.BatchRecognizeRequest.config\] at the
     /// request level.
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub config: ::core::option::Option<RecognitionConfig>,
     /// The list of fields in
     /// \[config][google.cloud.speech.v2.BatchRecognizeFileMetadata.config\] that
@@ -1326,30 +1507,32 @@ pub struct BatchRecognizeFileMetadata {
     /// \[config][google.cloud.speech.v2.BatchRecognizeFileMetadata.config\]
     /// completely overrides and replaces the config in the recognizer for this
     /// recognition request.
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub config_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// The audio source, which is a Google Cloud Storage URI.
-    #[prost(oneof="batch_recognize_file_metadata::AudioSource", tags="1")]
+    #[prost(oneof = "batch_recognize_file_metadata::AudioSource", tags = "1")]
     pub audio_source: ::core::option::Option<batch_recognize_file_metadata::AudioSource>,
 }
 /// Nested message and enum types in `BatchRecognizeFileMetadata`.
 pub mod batch_recognize_file_metadata {
     /// The audio source, which is a Google Cloud Storage URI.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum AudioSource {
         /// Cloud Storage URI for the audio file.
-        #[prost(string, tag="1")]
+        #[prost(string, tag = "1")]
         Uri(::prost::alloc::string::String),
     }
 }
 /// A streaming speech recognition result corresponding to a portion of the audio
 /// that is currently being processed.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamingRecognitionResult {
     /// May contain one or more recognition hypotheses. These alternatives are
     /// ordered in terms of accuracy, with the top (first) alternative being the
     /// most probable, as ranked by the recognizer.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub alternatives: ::prost::alloc::vec::Vec<SpeechRecognitionAlternative>,
     /// If `false`, this
     /// \[StreamingRecognitionResult][google.cloud.speech.v2.StreamingRecognitionResult\]
@@ -1358,29 +1541,29 @@ pub struct StreamingRecognitionResult {
     /// \[StreamingRecognitionResult][google.cloud.speech.v2.StreamingRecognitionResult\],
     /// the recognizer will not return any further hypotheses for this portion of
     /// the transcript and corresponding audio.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub is_final: bool,
     /// An estimate of the likelihood that the recognizer will not change its guess
     /// about this interim result. Values range from 0.0 (completely unstable)
     /// to 1.0 (completely stable). This field is only provided for interim results
     /// (\[is_final][google.cloud.speech.v2.StreamingRecognitionResult.is_final\]=`false`).
     /// The default of 0.0 is a sentinel value indicating `stability` was not set.
-    #[prost(float, tag="3")]
+    #[prost(float, tag = "3")]
     pub stability: f32,
     /// Time offset of the end of this result relative to the beginning of the
     /// audio.
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub result_end_offset: ::core::option::Option<::prost_types::Duration>,
     /// For multi-channel audio, this is the channel number corresponding to the
     /// recognized result for the audio from that channel.
     /// For
     /// `audio_channel_count` = `N`, its output values can range from `1` to `N`.
-    #[prost(int32, tag="5")]
+    #[prost(int32, tag = "5")]
     pub channel_tag: i32,
     /// Output only. The \[BCP-47\](<https://www.rfc-editor.org/rfc/bcp/bcp47.txt>)
     /// language tag of the language in this result. This language code was
     /// detected to have the most likelihood of being spoken in the audio.
-    #[prost(string, tag="6")]
+    #[prost(string, tag = "6")]
     pub language_code: ::prost::alloc::string::String,
 }
 /// `StreamingRecognizeResponse` is the only message returned to the client by
@@ -1431,6 +1614,7 @@ pub struct StreamingRecognitionResult {
 ///      `error`,
 ///      `speech_event_type`, or
 ///      one or more (repeated) `results`.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamingRecognizeResponse {
     /// This repeated list contains zero or more results that
@@ -1440,22 +1624,32 @@ pub struct StreamingRecognizeResponse {
     /// result (the newly settled portion), followed by zero or more
     /// \[is_final][google.cloud.speech.v2.StreamingRecognitionResult.is_final\]=`false`
     /// results (the interim results).
-    #[prost(message, repeated, tag="6")]
+    #[prost(message, repeated, tag = "6")]
     pub results: ::prost::alloc::vec::Vec<StreamingRecognitionResult>,
     /// Indicates the type of speech event.
-    #[prost(enumeration="streaming_recognize_response::SpeechEventType", tag="3")]
+    #[prost(enumeration = "streaming_recognize_response::SpeechEventType", tag = "3")]
     pub speech_event_type: i32,
     /// Time offset between the beginning of the audio and event emission.
-    #[prost(message, optional, tag="7")]
+    #[prost(message, optional, tag = "7")]
     pub speech_event_offset: ::core::option::Option<::prost_types::Duration>,
     /// Metadata about the recognition.
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub metadata: ::core::option::Option<RecognitionResponseMetadata>,
 }
 /// Nested message and enum types in `StreamingRecognizeResponse`.
 pub mod streaming_recognize_response {
     /// Indicates the type of speech event.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum SpeechEventType {
         /// No speech event specified.
@@ -1491,17 +1685,28 @@ pub mod streaming_recognize_response {
                 SpeechEventType::SpeechActivityEnd => "SPEECH_ACTIVITY_END",
             }
         }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "SPEECH_EVENT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+                "END_OF_SINGLE_UTTERANCE" => Some(Self::EndOfSingleUtterance),
+                "SPEECH_ACTIVITY_BEGIN" => Some(Self::SpeechActivityBegin),
+                "SPEECH_ACTIVITY_END" => Some(Self::SpeechActivityEnd),
+                _ => None,
+            }
+        }
     }
 }
 /// Message representing the config for the Speech-to-Text API. This includes an
 /// optional [KMS key](<https://cloud.google.com/kms/docs/resource-hierarchy#keys>)
 /// with which incoming data will be encrypted.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Config {
     /// Output only. Identifier. The name of the config resource. There is exactly
     /// one config resource per project per location. The expected format is
     /// `projects/{project}/locations/{location}/config`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// Optional. An optional [KMS key
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#keys>) that if
@@ -1509,109 +1714,126 @@ pub struct Config {
     /// this key will not encrypt existing resources using this key; only new
     /// resources will be encrypted using this key. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub kms_key_name: ::prost::alloc::string::String,
     /// Output only. The most recent time this resource was modified.
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub update_time: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// Request message for the
 /// \[GetConfig][google.cloud.speech.v2.Speech.GetConfig\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetConfigRequest {
     /// Required. The name of the config to retrieve. There is exactly one config
     /// resource per project per location. The expected format is
     /// `projects/{project}/locations/{location}/config`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UpdateConfig][google.cloud.speech.v2.Speech.UpdateConfig\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateConfigRequest {
     /// Required. The config to update.
     ///
     /// The config's `name` field is used to identify the config to be updated.
     /// The expected format is `projects/{project}/locations/{location}/config`.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub config: ::core::option::Option<Config>,
     /// The list of fields to be updated.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub update_mask: ::core::option::Option<::prost_types::FieldMask>,
 }
 /// CustomClass for biasing in speech recognition. Used to define a set of words
 /// or phrases that represents a common concept or theme likely to appear in your
 /// audio, for example a list of passenger ship names.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CustomClass {
     /// Output only. Identifier. The resource name of the CustomClass.
     /// Format:
     /// `projects/{project}/locations/{location}/customClasses/{custom_class}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// Output only. System-assigned unique identifier for the CustomClass.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub uid: ::prost::alloc::string::String,
     /// Optional. User-settable, human-readable name for the CustomClass. Must be
     /// 63 characters or less.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub display_name: ::prost::alloc::string::String,
     /// A collection of class items.
-    #[prost(message, repeated, tag="5")]
+    #[prost(message, repeated, tag = "5")]
     pub items: ::prost::alloc::vec::Vec<custom_class::ClassItem>,
     /// Output only. The CustomClass lifecycle state.
-    #[prost(enumeration="custom_class::State", tag="15")]
+    #[prost(enumeration = "custom_class::State", tag = "15")]
     pub state: i32,
     /// Output only. Creation time.
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub create_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The most recent time this resource was modified.
-    #[prost(message, optional, tag="7")]
+    #[prost(message, optional, tag = "7")]
     pub update_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The time at which this resource was requested for deletion.
-    #[prost(message, optional, tag="8")]
+    #[prost(message, optional, tag = "8")]
     pub delete_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The time at which this resource will be purged.
-    #[prost(message, optional, tag="9")]
+    #[prost(message, optional, tag = "9")]
     pub expire_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Optional. Allows users to store small amounts of arbitrary data.
     /// Both the key and the value must be 63 characters or less each.
     /// At most 100 annotations.
-    #[prost(map="string, string", tag="10")]
-    pub annotations: ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    #[prost(map = "string, string", tag = "10")]
+    pub annotations: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        ::prost::alloc::string::String,
+    >,
     /// Output only. This checksum is computed by the server based on the value of
     /// other fields. This may be sent on update, undelete, and delete requests to
     /// ensure the client has an up-to-date value before proceeding.
-    #[prost(string, tag="11")]
+    #[prost(string, tag = "11")]
     pub etag: ::prost::alloc::string::String,
     /// Output only. Whether or not this CustomClass is in the process of being
     /// updated.
-    #[prost(bool, tag="12")]
+    #[prost(bool, tag = "12")]
     pub reconciling: bool,
     /// Output only. The [KMS key
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#keys>) with which
     /// the CustomClass is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-    #[prost(string, tag="13")]
+    #[prost(string, tag = "13")]
     pub kms_key_name: ::prost::alloc::string::String,
     /// Output only. The [KMS key version
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#key_versions>)
     /// with which the CustomClass is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}/cryptoKeyVersions/{crypto_key_version}`.
-    #[prost(string, tag="14")]
+    #[prost(string, tag = "14")]
     pub kms_key_version_name: ::prost::alloc::string::String,
 }
 /// Nested message and enum types in `CustomClass`.
 pub mod custom_class {
     /// An item of the class.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct ClassItem {
         /// The class item's value.
-        #[prost(string, tag="1")]
+        #[prost(string, tag = "1")]
         pub value: ::prost::alloc::string::String,
     }
     /// Set of states that define the lifecycle of a CustomClass.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum State {
         /// Unspecified state.  This is only used/useful for distinguishing
@@ -1634,22 +1856,32 @@ pub mod custom_class {
                 State::Deleted => "DELETED",
             }
         }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "STATE_UNSPECIFIED" => Some(Self::Unspecified),
+                "ACTIVE" => Some(Self::Active),
+                "DELETED" => Some(Self::Deleted),
+                _ => None,
+            }
+        }
     }
 }
 /// PhraseSet for biasing in speech recognition. A PhraseSet is used to provide
 /// "hints" to the speech recognizer to favor specific words and phrases in the
 /// results.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PhraseSet {
     /// Output only. Identifier. The resource name of the PhraseSet.
     /// Format: `projects/{project}/locations/{location}/phraseSets/{phrase_set}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// Output only. System-assigned unique identifier for the PhraseSet.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub uid: ::prost::alloc::string::String,
     /// A list of word and phrases.
-    #[prost(message, repeated, tag="3")]
+    #[prost(message, repeated, tag = "3")]
     pub phrases: ::prost::alloc::vec::Vec<phrase_set::Phrase>,
     /// Hint Boost. Positive value will increase the probability that a specific
     /// phrase will be recognized over other similar sounding phrases. The higher
@@ -1657,52 +1889,55 @@ pub struct PhraseSet {
     /// Valid `boost` values are between 0 (exclusive) and 20. We recommend using a
     /// binary search approach to finding the optimal value for your use case as
     /// well as adding phrases both with and without boost to your requests.
-    #[prost(float, tag="4")]
+    #[prost(float, tag = "4")]
     pub boost: f32,
     /// User-settable, human-readable name for the PhraseSet. Must be 63
     /// characters or less.
-    #[prost(string, tag="5")]
+    #[prost(string, tag = "5")]
     pub display_name: ::prost::alloc::string::String,
     /// Output only. The PhraseSet lifecycle state.
-    #[prost(enumeration="phrase_set::State", tag="15")]
+    #[prost(enumeration = "phrase_set::State", tag = "15")]
     pub state: i32,
     /// Output only. Creation time.
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub create_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The most recent time this resource was modified.
-    #[prost(message, optional, tag="7")]
+    #[prost(message, optional, tag = "7")]
     pub update_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The time at which this resource was requested for deletion.
-    #[prost(message, optional, tag="8")]
+    #[prost(message, optional, tag = "8")]
     pub delete_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Output only. The time at which this resource will be purged.
-    #[prost(message, optional, tag="9")]
+    #[prost(message, optional, tag = "9")]
     pub expire_time: ::core::option::Option<::prost_types::Timestamp>,
     /// Allows users to store small amounts of arbitrary data.
     /// Both the key and the value must be 63 characters or less each.
     /// At most 100 annotations.
-    #[prost(map="string, string", tag="10")]
-    pub annotations: ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    #[prost(map = "string, string", tag = "10")]
+    pub annotations: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        ::prost::alloc::string::String,
+    >,
     /// Output only. This checksum is computed by the server based on the value of
     /// other fields. This may be sent on update, undelete, and delete requests to
     /// ensure the client has an up-to-date value before proceeding.
-    #[prost(string, tag="11")]
+    #[prost(string, tag = "11")]
     pub etag: ::prost::alloc::string::String,
     /// Output only. Whether or not this PhraseSet is in the process of being
     /// updated.
-    #[prost(bool, tag="12")]
+    #[prost(bool, tag = "12")]
     pub reconciling: bool,
     /// Output only. The [KMS key
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#keys>) with which
     /// the PhraseSet is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-    #[prost(string, tag="13")]
+    #[prost(string, tag = "13")]
     pub kms_key_name: ::prost::alloc::string::String,
     /// Output only. The [KMS key version
     /// name](<https://cloud.google.com/kms/docs/resource-hierarchy#key_versions>)
     /// with which the PhraseSet is encrypted. The expected format is
     /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}/cryptoKeyVersions/{crypto_key_version}`.
-    #[prost(string, tag="14")]
+    #[prost(string, tag = "14")]
     pub kms_key_version_name: ::prost::alloc::string::String,
 }
 /// Nested message and enum types in `PhraseSet`.
@@ -1715,10 +1950,11 @@ pub mod phrase_set {
     ///
     /// List items can also include CustomClass references containing groups of
     /// words that represent common concepts that occur in natural language.
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Phrase {
         /// The phrase itself.
-        #[prost(string, tag="1")]
+        #[prost(string, tag = "1")]
         pub value: ::prost::alloc::string::String,
         /// Hint Boost. Overrides the boost set at the phrase set level.
         /// Positive value will increase the probability that a specific phrase will
@@ -1730,11 +1966,21 @@ pub mod phrase_set {
         /// We recommend using a binary search approach to finding the optimal value
         /// for your use case as well as adding phrases both with and without boost
         /// to your requests.
-        #[prost(float, tag="2")]
+        #[prost(float, tag = "2")]
         pub boost: f32,
     }
     /// Set of states that define the lifecycle of a PhraseSet.
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
     #[repr(i32)]
     pub enum State {
         /// Unspecified state.  This is only used/useful for distinguishing
@@ -1757,44 +2003,55 @@ pub mod phrase_set {
                 State::Deleted => "DELETED",
             }
         }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "STATE_UNSPECIFIED" => Some(Self::Unspecified),
+                "ACTIVE" => Some(Self::Active),
+                "DELETED" => Some(Self::Deleted),
+                _ => None,
+            }
+        }
     }
 }
 /// Request message for the
 /// \[CreateCustomClass][google.cloud.speech.v2.Speech.CreateCustomClass\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateCustomClassRequest {
     /// Required. The CustomClass to create.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub custom_class: ::core::option::Option<CustomClass>,
     /// If set, validate the request and preview the CustomClass, but do not
     /// actually create it.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub validate_only: bool,
     /// The ID to use for the CustomClass, which will become the final component of
     /// the CustomClass's resource name.
     ///
     /// This value should be 4-63 characters, and valid characters
     /// are /\[a-z][0-9\]-/.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub custom_class_id: ::prost::alloc::string::String,
     /// Required. The project and location where this CustomClass will be created.
     /// The expected format is `projects/{project}/locations/{location}`.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub parent: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[ListCustomClasses][google.cloud.speech.v2.Speech.ListCustomClasses\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListCustomClassesRequest {
     /// Required. The project and location of CustomClass resources to list. The
     /// expected format is `projects/{project}/locations/{location}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub parent: ::prost::alloc::string::String,
     /// Number of results per requests. A valid page_size ranges from 0 to 100
     /// inclusive. If the page_size is zero or unspecified, a page size of 5 will
     /// be chosen. If the page size exceeds 100, it will be coerced down to 100.
     /// Note that a call might return fewer results than the requested page size.
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     pub page_size: i32,
     /// A page token, received from a previous
     /// \[ListCustomClasses][google.cloud.speech.v2.Speech.ListCustomClasses\] call.
@@ -1803,37 +2060,40 @@ pub struct ListCustomClassesRequest {
     /// When paginating, all other parameters provided to
     /// \[ListCustomClasses][google.cloud.speech.v2.Speech.ListCustomClasses\] must
     /// match the call that provided the page token.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub page_token: ::prost::alloc::string::String,
     /// Whether, or not, to show resources that have been deleted.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub show_deleted: bool,
 }
 /// Response message for the
 /// \[ListCustomClasses][google.cloud.speech.v2.Speech.ListCustomClasses\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListCustomClassesResponse {
     /// The list of requested CustomClasses.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub custom_classes: ::prost::alloc::vec::Vec<CustomClass>,
     /// A token, which can be sent as
     /// \[page_token][google.cloud.speech.v2.ListCustomClassesRequest.page_token\] to
     /// retrieve the next page. If this field is omitted, there are no subsequent
     /// pages. This token expires after 72 hours.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub next_page_token: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[GetCustomClass][google.cloud.speech.v2.Speech.GetCustomClass\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCustomClassRequest {
     /// Required. The name of the CustomClass to retrieve. The expected format is
     /// `projects/{project}/locations/{location}/customClasses/{custom_class}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UpdateCustomClass][google.cloud.speech.v2.Speech.UpdateCustomClass\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCustomClassRequest {
     /// Required. The CustomClass to update.
@@ -1841,95 +2101,99 @@ pub struct UpdateCustomClassRequest {
     /// The CustomClass's `name` field is used to identify the CustomClass to
     /// update. Format:
     /// `projects/{project}/locations/{location}/customClasses/{custom_class}`.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub custom_class: ::core::option::Option<CustomClass>,
     /// The list of fields to be updated. If empty, all fields are considered for
     /// update.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub update_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// If set, validate the request and preview the updated CustomClass, but do
     /// not actually update it.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub validate_only: bool,
 }
 /// Request message for the
 /// \[DeleteCustomClass][google.cloud.speech.v2.Speech.DeleteCustomClass\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteCustomClassRequest {
     /// Required. The name of the CustomClass to delete.
     /// Format:
     /// `projects/{project}/locations/{location}/customClasses/{custom_class}`
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// If set, validate the request and preview the deleted CustomClass, but do
     /// not actually delete it.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub validate_only: bool,
     /// If set to true, and the CustomClass is not found, the request will succeed
     /// and  be a no-op (no Operation is recorded in this case).
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub allow_missing: bool,
     /// This checksum is computed by the server based on the value of other
     /// fields. This may be sent on update, undelete, and delete requests to ensure
     /// the client has an up-to-date value before proceeding.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub etag: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UndeleteCustomClass][google.cloud.speech.v2.Speech.UndeleteCustomClass\]
 /// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UndeleteCustomClassRequest {
     /// Required. The name of the CustomClass to undelete.
     /// Format:
     /// `projects/{project}/locations/{location}/customClasses/{custom_class}`
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// If set, validate the request and preview the undeleted CustomClass, but do
     /// not actually undelete it.
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub validate_only: bool,
     /// This checksum is computed by the server based on the value of other
     /// fields. This may be sent on update, undelete, and delete requests to ensure
     /// the client has an up-to-date value before proceeding.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub etag: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[CreatePhraseSet][google.cloud.speech.v2.Speech.CreatePhraseSet\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatePhraseSetRequest {
     /// Required. The PhraseSet to create.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub phrase_set: ::core::option::Option<PhraseSet>,
     /// If set, validate the request and preview the PhraseSet, but do not
     /// actually create it.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub validate_only: bool,
     /// The ID to use for the PhraseSet, which will become the final component of
     /// the PhraseSet's resource name.
     ///
     /// This value should be 4-63 characters, and valid characters
     /// are /\[a-z][0-9\]-/.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub phrase_set_id: ::prost::alloc::string::String,
     /// Required. The project and location where this PhraseSet will be created.
     /// The expected format is `projects/{project}/locations/{location}`.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub parent: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[ListPhraseSets][google.cloud.speech.v2.Speech.ListPhraseSets\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListPhraseSetsRequest {
     /// Required. The project and location of PhraseSet resources to list. The
     /// expected format is `projects/{project}/locations/{location}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub parent: ::prost::alloc::string::String,
     /// The maximum number of PhraseSets to return. The service may return fewer
     /// than this value. If unspecified, at most 5 PhraseSets will be returned.
     /// The maximum value is 100; values above 100 will be coerced to 100.
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     pub page_size: i32,
     /// A page token, received from a previous
     /// \[ListPhraseSets][google.cloud.speech.v2.Speech.ListPhraseSets\] call.
@@ -1938,93 +2202,98 @@ pub struct ListPhraseSetsRequest {
     /// When paginating, all other parameters provided to
     /// \[ListPhraseSets][google.cloud.speech.v2.Speech.ListPhraseSets\] must match
     /// the call that provided the page token.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub page_token: ::prost::alloc::string::String,
     /// Whether, or not, to show resources that have been deleted.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub show_deleted: bool,
 }
 /// Response message for the
 /// \[ListPhraseSets][google.cloud.speech.v2.Speech.ListPhraseSets\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListPhraseSetsResponse {
     /// The list of requested PhraseSets.
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub phrase_sets: ::prost::alloc::vec::Vec<PhraseSet>,
     /// A token, which can be sent as
     /// \[page_token][google.cloud.speech.v2.ListPhraseSetsRequest.page_token\] to
     /// retrieve the next page. If this field is omitted, there are no subsequent
     /// pages. This token expires after 72 hours.
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub next_page_token: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[GetPhraseSet][google.cloud.speech.v2.Speech.GetPhraseSet\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPhraseSetRequest {
     /// Required. The name of the PhraseSet to retrieve. The expected format is
     /// `projects/{project}/locations/{location}/phraseSets/{phrase_set}`.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UpdatePhraseSet][google.cloud.speech.v2.Speech.UpdatePhraseSet\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdatePhraseSetRequest {
     /// Required. The PhraseSet to update.
     ///
     /// The PhraseSet's `name` field is used to identify the PhraseSet to update.
     /// Format: `projects/{project}/locations/{location}/phraseSets/{phrase_set}`.
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub phrase_set: ::core::option::Option<PhraseSet>,
     /// The list of fields to update. If empty, all non-default valued fields are
     /// considered for update. Use `*` to update the entire PhraseSet resource.
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub update_mask: ::core::option::Option<::prost_types::FieldMask>,
     /// If set, validate the request and preview the updated PhraseSet, but do not
     /// actually update it.
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub validate_only: bool,
 }
 /// Request message for the
 /// \[DeletePhraseSet][google.cloud.speech.v2.Speech.DeletePhraseSet\] method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeletePhraseSetRequest {
     /// Required. The name of the PhraseSet to delete.
     /// Format: `projects/{project}/locations/{location}/phraseSets/{phrase_set}`
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// If set, validate the request and preview the deleted PhraseSet, but do not
     /// actually delete it.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub validate_only: bool,
     /// If set to true, and the PhraseSet is not found, the request will succeed
     /// and  be a no-op (no Operation is recorded in this case).
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub allow_missing: bool,
     /// This checksum is computed by the server based on the value of other
     /// fields. This may be sent on update, undelete, and delete requests to ensure
     /// the client has an up-to-date value before proceeding.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub etag: ::prost::alloc::string::String,
 }
 /// Request message for the
 /// \[UndeletePhraseSet][google.cloud.speech.v2.Speech.UndeletePhraseSet\]
 /// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UndeletePhraseSetRequest {
     /// Required. The name of the PhraseSet to undelete.
     /// Format: `projects/{project}/locations/{location}/phraseSets/{phrase_set}`
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     /// If set, validate the request and preview the undeleted PhraseSet, but do
     /// not actually undelete it.
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub validate_only: bool,
     /// This checksum is computed by the server based on the value of other
     /// fields. This may be sent on update, undelete, and delete requests to ensure
     /// the client has an up-to-date value before proceeding.
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub etag: ::prost::alloc::string::String,
 }
 /// Generated client implementations.

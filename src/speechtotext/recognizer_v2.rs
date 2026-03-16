@@ -129,12 +129,12 @@ impl Recognizer {
         //     streaming_request: Some(StreamingRequest::StreamingConfig(config)),
         // };
 
-        let streaming_config = StreamingRecognizeRequest {
-            recognizer: recognizer.clone(),
-            streaming_request: Some(StreamingRequest::StreamingConfig(config)),
-        };
+        // let streaming_config = StreamingRecognizeRequest {
+        //     recognizer: recognizer.clone(),
+        //     streaming_request: Some(StreamingRequest::StreamingConfig(config)),
+        // };
 
-        audio_sender.send(streaming_config).await.unwrap();
+        // audio_sender.send(streaming_config).await.unwrap();
 
         Ok(Recognizer {
             speech_client,
