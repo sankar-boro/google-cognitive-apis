@@ -40,7 +40,7 @@ use crate::api::grpc::google::cloud::speechtotext::v2::SpeechAdaptation as GrpcS
 /// This can be added but would require implementation of serde deserialization
 /// and Into<T> implementation as we currently have in v1 REST API.
 use crate::errors::{Error, Result};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Serializer};
 use std::convert::Into;
 // since initial implementation really extends just SpeechContext and defines RecognitionConfig which
 // uses it we will reuse all other structures from v1 API
@@ -52,25 +52,30 @@ use super::v1::{
     SpeakerDiarizationConfig,
 };
 
-use crate::api::grpc::google::cloud::speechtotext::v2::custom_class::ClassItem as GrpcClassItem;
-use crate::api::grpc::google::cloud::speechtotext::v2::phrase_set::Phrase as GrpcPhrase;
-use crate::api::grpc::google::cloud::speechtotext::v2::CustomClass as GrpcCustomClass;
-use crate::api::grpc::google::cloud::speechtotext::v2::PhraseSet as GrpcPhraseSet;
-use crate::api::grpc::google::cloud::speechtotext::v2::RecognitionConfig as GrpcRecognitionConfig;
-use crate::api::grpc::google::cloud::speechtotext::v2::RecognitionFeatures as GrpcRecognitionFeatures;
-use crate::api::grpc::google::cloud::speechtotext::v2::speech_adaptation::AdaptationPhraseSet as GrpcAdaptationPhraseSet;
-use crate::api::grpc::google::cloud::speechtotext::v2::speech_adaptation::adaptation_phrase_set::Value;
+use crate::api::grpc::google::cloud::speechtotext::v2::{
+    custom_class::ClassItem as GrpcClassItem,
+    phrase_set::Phrase as GrpcPhrase,
+    CustomClass as GrpcCustomClass,
+    PhraseSet as GrpcPhraseSet,
+    RecognitionConfig as GrpcRecognitionConfig,
+    RecognitionFeatures as GrpcRecognitionFeatures,
+    speech_adaptation::AdaptationPhraseSet as GrpcAdaptationPhraseSet,
+    speech_adaptation::adaptation_phrase_set::Value,
+    recognition_config::DecodingConfig,
+    AutoDetectDecodingConfig, TranslationConfig,
+    ExplicitDecodingConfig
+};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecognitionConfig {
-    // #[serde(default = "default_encoding")]
-    // pub encoding: AudioEncoding,
+    #[serde(default = "default_encoding")]
+    pub encoding: AudioEncoding,
 
-    // #[serde(rename = "sampleRateHertz", skip_serializing_if = "Option::is_none")]
-    // pub sample_rate_hertz: Option<i32>,
+    #[serde(rename = "sampleRateHertz", skip_serializing_if = "Option::is_none")]
+    pub sample_rate_hertz: Option<i32>,
 
-    // #[serde(rename = "audioChannelCount", default = "default_audio_channel_count")]
-    // pub audio_channel_count: i32,
+    #[serde(rename = "audioChannelCount", default = "default_audio_channel_count")]
+    pub audio_channel_count: i32,
 
     // #[serde(
     //     rename = "enableSeparateRecognitionPerChannel",
@@ -81,27 +86,27 @@ pub struct RecognitionConfig {
     #[serde(rename = "languageCode", default = "default_language_code")]
     pub language_code: String,
 
-    // #[serde(rename = "maxAlternatives", default = "default_max_alternatives")]
-    // pub max_alternatives: i32,
+    #[serde(rename = "maxAlternatives", default = "default_max_alternatives")]
+    pub max_alternatives: i32,
 
-    // #[serde(rename = "profanityFilter", default = "default_profanity_filter")]
-    // pub profanity_filter: bool,
+    #[serde(rename = "profanityFilter", default = "default_profanity_filter")]
+    pub profanity_filter: bool,
 
     // // Deprecated
     // // #[serde(rename = "speechContexts")]
     // // pub speech_contexts: Vec<SpeechContext>,
 
-    // #[serde(
-    //     rename = "enableWordTimeOffsets",
-    //     default = "default_enable_word_time_offsets"
-    // )]
-    // pub enable_word_time_offsets: bool,
+    #[serde(
+        rename = "enableWordTimeOffsets",
+        default = "default_enable_word_time_offsets"
+    )]
+    pub enable_word_time_offsets: bool,
 
-    // #[serde(
-    //     rename = "enableAutomaticPunctuation",
-    //     default = "default_enable_automatic_punctuation"
-    // )]
-    // pub enable_automatic_punctuation: bool,
+    #[serde(
+        rename = "enableAutomaticPunctuation",
+        default = "default_enable_automatic_punctuation"
+    )]
+    pub enable_automatic_punctuation: bool,
 
     // #[serde(rename = "diarizationConfig", skip_serializing_if = "Option::is_none")]
     // pub diarization_config: Option<SpeakerDiarizationConfig>,
@@ -118,7 +123,10 @@ pub struct RecognitionConfig {
     // #[serde(skip_serializing_if = "Option::is_none")]
     // pub adaptation: Option<GrpcSpeechAdaptation>,
 
-    
+    // #[serde(skip_serializing_if = "Option::is_none")]
+    // pub decoding_config: Option<DecodingConfig>
+
+    pub target_language: Option<String>    
 }
 
 #[allow(deprecated)]
@@ -128,67 +136,41 @@ impl Into<GrpcRecognitionConfig> for RecognitionConfig {
             model: self.model.to_string(),
             language_codes: vec![self.language_code.to_string()],
             features: Some(GrpcRecognitionFeatures {
-                enable_automatic_punctuation: true,
-                enable_word_time_offsets: false,
+                profanity_filter: self.profanity_filter,
+                enable_automatic_punctuation: self.enable_automatic_punctuation,
+                enable_word_time_offsets: self.enable_word_time_offsets,
                 enable_word_confidence: false,
+                max_alternatives: self.max_alternatives,
                 ..Default::default()
             }),
             adaptation: None,
             transcript_normalization: None,
-            translation_config: None,
+            translation_config: match self.target_language {
+                Some(target_language) => Some(TranslationConfig {
+                    target_language
+                }),
+                None => None
+            },
             denoiser_config: None,
-            decoding_config: None,
-            // encoding: match self.encoding {
-            //     AudioEncoding::ENCODING_UNSPECIFIED => 0,
-            //     AudioEncoding::LINEAR16 => 1,
-            //     AudioEncoding::FLAC => 2,
-            //     AudioEncoding::MULAW => 3,
-            //     AudioEncoding::AMR => 4,
-            //     AudioEncoding::AMR_WB => 5,
-            //     AudioEncoding::OGG_OPUS => 6,
-            //     AudioEncoding::SPEEX_WITH_HEADER_BYTE => 7,
-            // },
-            // sample_rate_hertz: match self.sample_rate_hertz {
-            //     Some(val) => val,
-            //     None => 8000,
-            // },
-            // audio_channel_count: self.audio_channel_count,
-            // enable_separate_recognition_per_channel: self.enable_separate_recognition_per_channel,
-            // language_code: self.language_code,
-            // max_alternatives: self.max_alternatives,
-            // profanity_filter: self.profanity_filter,
-            // speech_contexts: {
-            //     let mut speech_contexts: Vec<GrpcSpeechContext> = vec![];
-
-            //     for item in self.speech_contexts {
-            //         speech_contexts.push(item.into())
-            //     }
-            //     speech_contexts
-            // },
-            // enable_word_time_offsets: self.enable_word_time_offsets,
-            // enable_automatic_punctuation: self.enable_automatic_punctuation,
-            // So far not supported!
-            // diarization_config: None,
-            // So far not supported!
-            // metadata: None,
-            // model: self.model.to_string(),
-            // use_enhanced: match self.use_enhanced {
-            //     Some(val) => val,
-            //     _ => false,
-            // },
-            // adaptation: match self.adaptation {
-            //     Some(adpt) => Some(adpt.into()),
-            //     _ => None,
-            // },
-            // Below are the new v1p1beta1 attributes of RecognitionConfig
-            // Since we introduced this config initially for enhanced SpeechContext
-            // only these are not supported currently and we map just default/None values!
-            // alternative_language_codes: vec![],
-            // diarization_speaker_count: 2,
-            // enable_speaker_diarization: false,
-            // enable_spoken_emojis: None,
-            // enable_spoken_punctuation: None,
-            // enable_word_confidence: false,
+            decoding_config: Some(DecodingConfig::ExplicitDecodingConfig(
+                ExplicitDecodingConfig {
+                    encoding: match self.encoding {
+                        AudioEncoding::ENCODING_UNSPECIFIED => 0,
+                        AudioEncoding::LINEAR16 => 1,
+                        AudioEncoding::FLAC => 2,
+                        AudioEncoding::MULAW => 3,
+                        AudioEncoding::AMR => 4,
+                        AudioEncoding::AMR_WB => 5,
+                        AudioEncoding::OGG_OPUS => 6,
+                        AudioEncoding::SPEEX_WITH_HEADER_BYTE => 7,
+                    },
+                    sample_rate_hertz: match self.sample_rate_hertz {
+                        Some(val) => val,
+                        None => 8000,
+                    },
+                    audio_channel_count: self.audio_channel_count,
+                },
+            )),
         }
     }
 }
@@ -237,20 +219,20 @@ impl Into<GrpcPhraseSet> for PhraseSet {
                 .collect(),
 
             boost: self.boost,
-
+            ..Default::default()
             // Output-only / optional fields → leave unset
-            uid: String::new(),
-            display_name: String::new(),
-            state: 0, // default enum value
-            create_time: None,
-            update_time: None,
-            delete_time: None,
-            expire_time: None,
-            annotations: Default::default(),
-            etag: String::new(),
-            reconciling: false,
-            kms_key_name: String::new(),
-            kms_key_version_name: String::new(),
+            // uid: String::new(),
+            // display_name: String::new(),
+            // state: 0, // default enum value
+            // create_time: None,
+            // update_time: None,
+            // delete_time: None,
+            // expire_time: None,
+            // annotations: Default::default(),
+            // etag: String::new(),
+            // reconciling: false,
+            // kms_key_name: String::new(),
+            // kms_key_version_name: String::new(),
         }
     }
 }
@@ -284,27 +266,26 @@ impl Into<GrpcCustomClass> for CustomClass {
     fn into(self) -> GrpcCustomClass {
         GrpcCustomClass {
             name: self.name,
-
             items: self.items
                 .into_iter()
                 .map(|item| GrpcClassItem {
                     value: item.value,
                 })
                 .collect(),
-
+            ..Default::default()
             // Output-only / optional → defaults
-            uid: String::new(),
-            display_name: String::new(),
-            state: 0, // enum default
-            create_time: None,
-            update_time: None,
-            delete_time: None,
-            expire_time: None,
-            annotations: Default::default(),
-            etag: String::new(),
-            reconciling: false,
-            kms_key_name: String::new(),
-            kms_key_version_name: String::new(),
+            // uid: String::new(),
+            // display_name: String::new(),
+            // state: 0, // enum default
+            // create_time: None,
+            // update_time: None,
+            // delete_time: None,
+            // expire_time: None,
+            // annotations: Default::default(),
+            // etag: String::new(),
+            // reconciling: false,
+            // kms_key_name: String::new(),
+            // kms_key_version_name: String::new(),
         }
     }
 }

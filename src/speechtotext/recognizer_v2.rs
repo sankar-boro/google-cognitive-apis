@@ -113,6 +113,43 @@ impl Recognizer {
         })
     }
 
+    /// Creates new speech recognizer from provided token
+    pub async fn create_streaming_recognizer_from_token(
+        // Google auth token
+        token: String,
+        //  Streaming recognition configuration
+        config: StreamingRecognitionConfig,
+        // Capacity of audio sink (tokio channel used by caller to send audio data).
+        // If not provided defaults to 1000.
+        buffer_size: Option<usize>,
+        //
+        recognizer: String,
+    ) -> Result<Self> {
+        let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
+
+        let speech_client =
+            SpeechClient::with_interceptor(channel, new_interceptor(token.into()));
+
+        let (audio_sender, audio_receiver) =
+            mpsc::channel::<StreamingRecognizeRequest>(buffer_size.unwrap_or(1000));
+
+        let streaming_config = StreamingRecognizeRequest {
+            recognizer: recognizer.clone(),
+            streaming_request: Some(StreamingRequest::StreamingConfig(config)),
+        };
+
+        audio_sender.send(streaming_config).await?;
+
+        Ok(Recognizer {
+            speech_client,
+            operations_client: None,
+            audio_sender: Some(audio_sender),
+            audio_receiver: Some(audio_receiver),
+            result_sender: None,
+            recognizer
+        })
+    }
+
     /// Creates new speech recognizer from provided
     /// Google credentials. This kind of recognizer can be used
     /// for long running recognition.
