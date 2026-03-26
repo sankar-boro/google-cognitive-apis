@@ -2,25 +2,6 @@
 #![allow(clippy::manual_unwrap_or)]
 #![allow(clippy::manual_map)]
 #![allow(unused_imports)]
-
-// Deprecated
-// use crate::api::grpc::google::cloud::speechtotext::v2::SpeechContext as GrpcSpeechContext;
-
-// #[derive(Debug, Serialize, Deserialize, Clone)]
-// pub struct SpeechContext {
-//     phrases: Vec<String>,
-//     boost: f32,
-// }
-
-// impl Into<GrpcSpeechContext> for SpeechContext {
-//     fn into(self) -> GrpcSpeechContext {
-//         GrpcSpeechContext {
-//             phrases: self.phrases,
-//             boost: self.boost,
-//         }
-//     }
-// }
-
 use crate::api::grpc::google::cloud::speechtotext::v2::SpeechAdaptation as GrpcSpeechAdaptation;
 /// This module DOES NOT address all the differences between GRPC v1 and v1p1beta1 proto definitions
 /// of speech-to-text API. For now it only defines extended version of SpeechContext struct
@@ -49,7 +30,6 @@ use super::v1::{
     default_enable_separate_recognition_per_channel, default_enable_word_time_offsets,
     default_encoding, default_language_code, default_max_alternatives, default_model,
     default_profanity_filter, AudioEncoding, RecognitionConfigModel, RecognitionMetadata,
-    SpeakerDiarizationConfig,
 };
 
 use crate::api::grpc::google::cloud::speechtotext::v2::{
@@ -60,11 +40,22 @@ use crate::api::grpc::google::cloud::speechtotext::v2::{
     RecognitionConfig as GrpcRecognitionConfig,
     RecognitionFeatures as GrpcRecognitionFeatures,
     speech_adaptation::AdaptationPhraseSet as GrpcAdaptationPhraseSet,
-    speech_adaptation::adaptation_phrase_set::Value,
+    speech_adaptation::adaptation_phrase_set::Value as GrpcValue,
     recognition_config::DecodingConfig,
     AutoDetectDecodingConfig, TranslationConfig,
-    ExplicitDecodingConfig
+    ExplicitDecodingConfig, 
+    SpeakerDiarizationConfig as GrpcSpeakerDiarizationConfig
 };
+
+// #[derive(Debug, Serialize, Deserialize, Clone)]
+// pub struct SpeakerDiarizationConfig {
+
+//     #[serde(rename = "minSpeakerCount", default = "default_min_speaker_count")]
+//     min_speaker_count: i32,
+
+//     #[serde(rename = "maxSpeakerCount", default = "default_max_speaker_count")]
+//     max_speaker_count: i32,
+// }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecognitionConfig {
@@ -108,8 +99,8 @@ pub struct RecognitionConfig {
     )]
     pub enable_automatic_punctuation: bool,
 
-    // #[serde(rename = "diarizationConfig", skip_serializing_if = "Option::is_none")]
-    // pub diarization_config: Option<SpeakerDiarizationConfig>,
+    #[serde(rename = "diarizationConfig", skip_serializing_if = "Option::is_none")]
+    pub diarization_config: Option<SpeakerDiarizationConfig>,
 
     // #[serde(skip_serializing_if = "Option::is_none")]
     // pub metadata: Option<RecognitionMetadata>,
@@ -117,14 +108,8 @@ pub struct RecognitionConfig {
     #[serde(default = "default_model")]
     pub model: RecognitionConfigModel,
 
-    // #[serde(rename = "useEnhanced", skip_serializing_if = "Option::is_none")]
-    // pub use_enhanced: Option<bool>,
-
-    // #[serde(skip_serializing_if = "Option::is_none")]
-    // pub adaptation: Option<GrpcSpeechAdaptation>,
-
-    // #[serde(skip_serializing_if = "Option::is_none")]
-    // pub decoding_config: Option<DecodingConfig>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adaptation: Option<SpeechAdaptation>,
 
     pub target_language: Option<String>    
 }
@@ -141,9 +126,16 @@ impl Into<GrpcRecognitionConfig> for RecognitionConfig {
                 enable_word_time_offsets: self.enable_word_time_offsets,
                 enable_word_confidence: false,
                 max_alternatives: self.max_alternatives,
+                diarization_config: match self.diarization_config {
+                    Some(conf) => Some(conf.into()),
+                    _ => None
+                },
                 ..Default::default()
             }),
-            adaptation: None,
+            adaptation: match self.adaptation {
+                Some(adap) => Some(adap.into()),
+                _ => None
+            },
             transcript_normalization: None,
             translation_config: match self.target_language {
                 Some(target_language) => Some(TranslationConfig {
@@ -175,31 +167,73 @@ impl Into<GrpcRecognitionConfig> for RecognitionConfig {
     }
 }
 
-// :TODO
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SpeakerDiarizationConfig {
+    #[serde(rename = "minSpeakerCount")]
+    pub min_speaker_count: i32,
+    #[serde(rename = "maxSpeakerCount")]
+    pub max_speaker_count: i32,
+}
+
+impl Into<GrpcSpeakerDiarizationConfig> for SpeakerDiarizationConfig {
+    fn into(self) -> GrpcSpeakerDiarizationConfig {
+        GrpcSpeakerDiarizationConfig { 
+            min_speaker_count: self.min_speaker_count,
+            max_speaker_count: self.max_speaker_count
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Value {
+    PhraseSet(String),
+    InlinePhraseSet(PhraseSet),
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct AdaptationPhraseSet {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<Value>,
+}
+
+impl Into<GrpcAdaptationPhraseSet> for AdaptationPhraseSet {
+    fn into(self) -> GrpcAdaptationPhraseSet {
+        let value = match self.value {
+            Some(Value::PhraseSet(name)) => Some(GrpcValue::PhraseSet(name)),
+            Some(Value::InlinePhraseSet(inline)) => {
+                Some(GrpcValue::InlinePhraseSet(inline.into()))
+            }
+            None => None,
+        };
+
+        GrpcAdaptationPhraseSet { value }
+    }
+}
+        
 /// See https://cloud.google.com/speech-to-text/docs/reference/rest/v1p1beta1/RecognitionConfig#SpeechAdaptation
-// #[derive(Debug, Serialize, Deserialize, Clone)]
-// pub struct SpeechAdaptation {
-//     #[serde(rename = "phraseSets")]
-//     pub phrase_sets: Vec<GrpcAdaptationPhraseSet>,
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SpeechAdaptation {
+    #[serde(rename = "phraseSets")]
+    pub phrase_sets: Vec<AdaptationPhraseSet>,
 
-//     #[serde(rename = "phraseSetReferences")]
-//     pub phrase_set_references: Vec<String>,
+    #[serde(rename = "customClasses")]
+    pub custom_classes: Vec<CustomClass>,
+}
 
-//     #[serde(rename = "customClasses")]
-//     pub custom_classes: Vec<CustomClass>,
-// }
-
-// impl Into<GrpcSpeechAdaptation> for SpeechAdaptation {
-//     fn into(self) -> GrpcSpeechAdaptation {
-//         GrpcSpeechAdaptation {
-//             phrase_sets: self.phrase_sets.clone(),
-//             custom_classes: self.custom_classes
-//                 .into_iter()
-//                 .map(Into::into)
-//                 .collect(),
-//         }
-//     }
-// }
+impl Into<GrpcSpeechAdaptation> for SpeechAdaptation {
+    fn into(self) -> GrpcSpeechAdaptation {
+        GrpcSpeechAdaptation {
+            phrase_sets: self.phrase_sets
+                .into_iter()
+                .map(Into::into)
+                .collect(),
+            custom_classes: self.custom_classes
+                .into_iter()
+                .map(Into::into)
+                .collect(),
+        }
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PhraseSet {
