@@ -46,6 +46,93 @@ use tonic::{transport::Channel, Response as GrpcResponse, Streaming};
 const GRPC_API_DOMAIN: &str = "speech.googleapis.com";
 const GRPC_API_URL: &str = "https://speech.googleapis.com";
 
+#[derive(Debug, Clone)]
+pub struct RecognizerBuilder {
+    pub google_credentials: String,
+    pub streaming_config: Option<StreamingRecognitionConfig>,
+    pub buffer_size: Option<usize>,
+    pub grpc_api_domain: Option<&'static str>,
+    pub grpc_api_url: Option<&'static str>,
+    pub recognizer: Option<String>,
+}
+
+impl RecognizerBuilder {
+    pub fn new(google_credentials: impl AsRef<str>) -> Self {
+        RecognizerBuilder {
+            google_credentials: google_credentials.as_ref().to_string(),
+            streaming_config: None,
+            buffer_size: None,
+            grpc_api_domain: None,
+            grpc_api_url: None,
+            recognizer: None,
+        }
+    }
+
+    pub fn with_streaming_config(mut self, streaming_config: StreamingRecognitionConfig) -> Self {
+        self.streaming_config = Some(streaming_config);
+        self
+    }
+
+    pub fn with_buffer_size(mut self, buffer_size: usize) -> Self {
+        self.buffer_size = Some(buffer_size);
+        self
+    }
+
+    pub fn with_grpc_api_domain(mut self, grpc_api_domain: &'static str) -> Self {
+        self.grpc_api_domain = Some(grpc_api_domain);
+        self
+    }
+
+    pub fn with_grpc_api_url(mut self, grpc_api_url: &'static str) -> Self {
+        self.grpc_api_url = Some(grpc_api_url);
+        self
+    }
+
+    pub fn with_recognizer(mut self, recognizer: impl AsRef<str>) -> Self {
+        self.recognizer = Some(recognizer.as_ref().to_string());
+        self
+    }
+
+    pub async fn build(self) -> Result<Recognizer> {
+        let domain = self.grpc_api_domain.unwrap_or(GRPC_API_DOMAIN);
+        let url = self.grpc_api_url.unwrap_or(GRPC_API_URL);
+
+        let channel = new_grpc_channel(
+            domain,
+            url,
+            None,
+        )
+        .await?;
+
+        let token_header_val = get_token(self.google_credentials)?;
+
+        let speech_client =
+            SpeechClient::with_interceptor(channel, new_interceptor(token_header_val));
+
+        let (audio_sender, audio_receiver) =
+            mpsc::channel::<StreamingRecognizeRequest>(self.buffer_size.unwrap_or(1000));
+
+        let recognizer = self.recognizer.unwrap_or_default();
+
+        let streaming_config = StreamingRecognizeRequest {
+            recognizer: recognizer.clone(),
+            streaming_request: Some(StreamingRequest::StreamingConfig(
+                self.streaming_config.unwrap_or_default(),
+            )),
+        };
+
+        audio_sender.send(streaming_config).await?;
+
+        Ok(Recognizer {
+            speech_client,
+            operations_client: None,
+            audio_sender: Some(audio_sender),
+            audio_receiver: Some(audio_receiver),
+            result_sender: None,
+            recognizer,
+        })
+    }
+}
 /// Google Speech API recognizer
 #[derive(Debug)]
 pub struct Recognizer {
