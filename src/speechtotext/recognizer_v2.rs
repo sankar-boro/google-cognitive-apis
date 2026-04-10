@@ -17,7 +17,7 @@
 #![allow(clippy::manual_map)]
 #![allow(unused_imports)]
 use crate::api::grpc::google::cloud::speechtotext::v2::{
-    // LongRunningRecognizeRequest, LongRunningRecognizeResponse, 
+    BatchRecognizeRequest, BatchRecognizeResponse, 
     speech_client::SpeechClient, streaming_recognize_request::StreamingRequest,
     RecognizeRequest, RecognizeResponse,
     StreamingRecognitionConfig, StreamingRecognizeRequest, StreamingRecognizeResponse,
@@ -128,8 +128,7 @@ impl RecognizerBuilder {
             operations_client: None,
             audio_sender: Some(audio_sender),
             audio_receiver: Some(audio_receiver),
-            result_sender: None,
-            recognizer,
+            result_sender: None
         })
     }
 }
@@ -152,10 +151,6 @@ pub struct Recognizer {
     /// where STT results will be sent. Library client is using respective
     /// receiver to get the results. See example recognizer_streaming for details
     result_sender: Option<mpsc::Sender<StreamingRecognizeResponse>>,
-
-    /// Required. The name of the Recognizer to use during recognition. The expected format is projects/{project}/locations/{location}/recognizers/{recognizer}.
-    /// The {recognizer} segment may be set to _ to use an empty implicit Recognizer.
-    recognizer: String,
 }
 
 impl Recognizer {
@@ -170,7 +165,8 @@ impl Recognizer {
         // Capacity of audio sink (tokio channel used by caller to send audio data).
         // If not provided defaults to 1000.
         buffer_size: Option<usize>,
-        //
+        // Required. The name of the Recognizer to use during recognition. The expected format is projects/{project}/locations/{location}/recognizers/{recognizer}.
+        // The {recognizer} segment may be set to _ to use an empty implicit Recognizer.
         recognizer: String,
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
@@ -184,7 +180,7 @@ impl Recognizer {
             mpsc::channel::<StreamingRecognizeRequest>(buffer_size.unwrap_or(1000));
 
         let streaming_config = StreamingRecognizeRequest {
-            recognizer: recognizer.clone(),
+            recognizer,
             streaming_request: Some(StreamingRequest::StreamingConfig(config)),
         };
 
@@ -195,8 +191,7 @@ impl Recognizer {
             operations_client: None,
             audio_sender: Some(audio_sender),
             audio_receiver: Some(audio_receiver),
-            result_sender: None,
-            recognizer
+            result_sender: None
         })
     }
 
@@ -221,7 +216,7 @@ impl Recognizer {
             mpsc::channel::<StreamingRecognizeRequest>(buffer_size.unwrap_or(1000));
 
         let streaming_config = StreamingRecognizeRequest {
-            recognizer: recognizer.clone(),
+            recognizer,
             streaming_request: Some(StreamingRequest::StreamingConfig(config)),
         };
 
@@ -232,8 +227,7 @@ impl Recognizer {
             operations_client: None,
             audio_sender: Some(audio_sender),
             audio_receiver: Some(audio_receiver),
-            result_sender: None,
-            recognizer
+            result_sender: None
         })
     }
 
@@ -241,8 +235,7 @@ impl Recognizer {
     /// Google credentials. This kind of recognizer can be used
     /// for long running recognition.
     pub async fn create_asynchronous_recognizer(
-        google_credentials: impl AsRef<str>,
-        recognizer: String,
+        google_credentials: impl AsRef<str>
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
 
@@ -262,7 +255,6 @@ impl Recognizer {
             audio_sender: None,
             audio_receiver: None,
             result_sender: None,
-            recognizer,
         })
     }
 
@@ -271,7 +263,6 @@ impl Recognizer {
     /// for synchronous recognition.
     pub async fn create_synchronous_recognizer(
         google_credentials: impl AsRef<str>,
-        recognizer: String,
     ) -> Result<Self> {
         let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
 
@@ -286,7 +277,6 @@ impl Recognizer {
             audio_sender: None,
             audio_receiver: None,
             result_sender: None,
-            recognizer,
         })
     }
 
@@ -348,22 +338,22 @@ impl Recognizer {
         &mut self,
     ) -> impl Stream<Item = Result<StreamingRecognizeResponse>> + '_ {
         try_stream! {
-                // yank self.audio_receiver so that we can consume it
-                if let Some(audio_receiver) = self.audio_receiver.take() {
-                    let streaming_recognize_result: StdResult<
-                        TonicResponse<Streaming<StreamingRecognizeResponse>>,
-                        TonicStatus,
-                    > = self.speech_client.streaming_recognize(ReceiverStream::new(audio_receiver)).await;
+            // yank self.audio_receiver so that we can consume it
+            if let Some(audio_receiver) = self.audio_receiver.take() {
+                let streaming_recognize_result: StdResult<
+                    TonicResponse<Streaming<StreamingRecognizeResponse>>,
+                    TonicStatus,
+                > = self.speech_client.streaming_recognize(ReceiverStream::new(audio_receiver)).await;
 
-                    let mut response_stream: Streaming<StreamingRecognizeResponse> =
-                        streaming_recognize_result?.into_inner();
+                let mut response_stream: Streaming<StreamingRecognizeResponse> =
+                    streaming_recognize_result?.into_inner();
 
-                    trace!("streaming_recognize: entering loop");
-                    while let Some(streaming_recognize_response) = response_stream.message().await? {
-                        yield streaming_recognize_response;
-                    }
-                    trace!("streaming_recognize: leaving loop");
+                trace!("streaming_recognize: entering loop");
+                while let Some(streaming_recognize_response) = response_stream.message().await? {
+                    yield streaming_recognize_response;
                 }
+                trace!("streaming_recognize: leaving loop");
+            }
         }
     }
 
@@ -395,63 +385,63 @@ impl Recognizer {
     }
 
     /// Initiates asynchronous recognition.
-    /// Returns long running operation representing
+    /// Returns batch operation representing
     /// asynchronous computation performed by Google Cloud Platform.
-    /// Use long_running_wait to wait until operation is done.
-    // pub async fn long_running_recognize(
-    //     &mut self,
-    //     request: LongRunningRecognizeRequest,
-    // ) -> Result<GrpcResponse<Operation>> {
-    //     Ok(self.speech_client.long_running_recognize(request).await?)
-    // }
+    /// Use batch_wait to wait until operation is done.
+    pub async fn batch_recognize(
+        &mut self,
+        request: BatchRecognizeRequest,
+    ) -> Result<GrpcResponse<Operation>> {
+        Ok(self.speech_client.batch_recognize(request).await?)
+    }
 
-    /// Waits for completion of long running operation returned
-    /// by long_running_recognize function. Long running operation
-    /// result is then casted into LongRunningRecognizeResponse struct.
+    /// Waits for completion of batch operation returned
+    /// by batch_recognize function. Batch operation
+    /// result is then casted into BatchRecognizeResponse struct.
     /// Function checks operation status regularly using get_operation
     /// which is called every check_interval_ms ms. If check_interval_ms
     /// is not specified default interval check is 1 sec.
-    // pub async fn long_running_wait(
-    //     &mut self,
-    //     operation: Operation,
-    //     check_interval_ms: Option<u64>,
-    // ) -> Result<Option<LongRunningRecognizeResponse>> {
-    //     let operation_req = GetOperationRequest {
-    //         name: operation.name.clone(),
-    //     };
+    pub async fn batch_wait(
+        &mut self,
+        operation: Operation,
+        check_interval_ms: Option<u64>,
+    ) -> Result<Option<BatchRecognizeResponse>> {
+        let operation_req = GetOperationRequest {
+            name: operation.name.clone(),
+        };
 
-    //     loop {
-    //         if let Some(oper_client) = &mut self.operations_client {
-    //             let tonic_response: TonicResponse<Operation> =
-    //                 oper_client.get_operation(operation_req.clone()).await?;
-    //             let operation = tonic_response.into_inner();
-    //             if operation.done {
-    //                 return if let Some(operation_result) = operation.result {
-    //                     match operation_result {
-    //                         OperationResult::Error(rpc_status) => {
-    //                             error!("Recognizer.long_running_wait rpc error {:?}", rpc_status);
-    //                             Err(Error::new_with_code(
-    //                                 rpc_status.message,
-    //                                 rpc_status.code.to_string(),
-    //                             ))
-    //                         }
-    //                         OperationResult::Response(any_response) => {
-    //                             let lrr_response: LongRunningRecognizeResponse =
-    //                                 LongRunningRecognizeResponse::decode(&mut Cursor::new(
-    //                                     any_response.value,
-    //                                 ))?;
-    //                             Ok(Some(lrr_response))
-    //                         }
-    //                     }
-    //                 } else {
-    //                     Ok(None)
-    //                 };
-    //             } else {
-    //                 sleep(Duration::from_millis(check_interval_ms.unwrap_or(1000))).await;
-    //             }
-    //         }
-    //     }
-    // }
+        loop {
+            if let Some(oper_client) = &mut self.operations_client {
+                let tonic_response: TonicResponse<Operation> =
+                    oper_client.get_operation(operation_req.clone()).await?;
+                let operation = tonic_response.into_inner();
+                if operation.done {
+                    return if let Some(operation_result) = operation.result {
+                        match operation_result {
+                            OperationResult::Error(rpc_status) => {
+                                error!("Recognizer.long_running_wait rpc error {:?}", rpc_status);
+                                Err(Error::new_with_code(
+                                    rpc_status.message,
+                                    rpc_status.code.to_string(),
+                                ))
+                            }
+                            OperationResult::Response(any_response) => {
+                                let lrr_response: BatchRecognizeResponse =
+                                    BatchRecognizeResponse::decode(&mut Cursor::new(
+                                        any_response.value,
+                                    ))?;
+                                Ok(Some(lrr_response))
+                            }
+                        }
+                    } else {
+                        Ok(None)
+                    };
+                } else {
+                    sleep(Duration::from_millis(check_interval_ms.unwrap_or(1000))).await;
+                }
+            }
+        }
+    }
 
     /// Performs synchronous speech recognition.
     pub async fn recognize(&mut self, request: RecognizeRequest) -> Result<RecognizeResponse> {
