@@ -46,6 +46,21 @@ use tonic::{transport::Channel, Response as GrpcResponse, Streaming};
 const GRPC_API_DOMAIN: &str = "speech.googleapis.com";
 const GRPC_API_URL: &str = "https://speech.googleapis.com";
 
+/// Google Speech API recognizer builder
+#[derive(Debug)]
+pub struct RecognizerBuilder {
+    // Google Cloud Platform JSON credentials for project with Speech APIs enabled
+    google_credentials: String,
+    //  Streaming recognition configuration
+    config: StreamingRecognitionConfig,
+    // Capacity of audio sink (tokio channel used by caller to send audio data).
+    // If not provided defaults to 1000.
+    buffer_size: Option<usize>,
+    // Required. The name of the Recognizer to use during recognition. The expected format is projects/{project}/locations/{location}/recognizers/{recognizer}.
+    // The {recognizer} segment may be set to _ to use an empty implicit Recognizer.
+    recognizer: String,
+}
+
 /// Google Speech API recognizer
 #[derive(Debug)]
 pub struct Recognizer {
@@ -65,6 +80,76 @@ pub struct Recognizer {
     /// where STT results will be sent. Library client is using respective
     /// receiver to get the results. See example recognizer_streaming for details
     result_sender: Option<mpsc::Sender<StreamingRecognizeResponse>>,
+}
+
+impl RecognizerBuilder {
+    /// Create a new builder (required fields)
+    pub fn new(
+        google_credentials: impl AsRef<str>,
+        config: StreamingRecognitionConfig,
+        recognizer: impl AsRef<str>,
+    ) -> Self {
+        Self {
+            google_credentials: google_credentials.as_ref().to_string(),
+            config,
+            buffer_size: None,
+            recognizer: recognizer.as_ref().to_string(),
+        }
+    }
+
+    /// Set buffer size (optional)
+    pub fn buffer_size(mut self, size: usize) -> Self {
+        self.buffer_size = Some(size);
+        self
+    }
+
+    /// Replace config if needed
+    pub fn config(mut self, config: StreamingRecognitionConfig) -> Self {
+        self.config = config;
+        self
+    }
+
+    /// Replace credentials if needed
+    pub fn google_credentials(mut self, creds: impl AsRef<str>) -> Self {
+        self.google_credentials = creds.as_ref().to_string();
+        self
+    }
+
+    /// Replace recognizer name
+    pub fn recognizer(mut self, recognizer: impl AsRef<str>) -> Self {
+        self.recognizer = recognizer.as_ref().to_string();
+        self
+    }
+
+    pub async fn build(self) -> Result<Recognizer> {
+        let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
+
+        let token_header_val = get_token(&self.google_credentials)?;
+
+        let speech_client =
+            SpeechClient::with_interceptor(channel, new_interceptor(token_header_val));
+
+        let buffer_size = self.buffer_size.unwrap_or(1000);
+
+        let (audio_sender, audio_receiver) =
+            mpsc::channel::<StreamingRecognizeRequest>(buffer_size);
+
+        let streaming_config = StreamingRecognizeRequest {
+            recognizer: self.recognizer.clone(),
+            streaming_request: Some(StreamingRequest::StreamingConfig(self.config.clone())),
+        };
+
+        // send initial config message
+        audio_sender.send(streaming_config).await?;
+
+        Ok(Recognizer {
+            speech_client,
+            operations_client: None,
+            audio_sender: Some(audio_sender),
+            audio_receiver: Some(audio_receiver),
+            result_sender: None,
+        })
+    }
 }
 
 impl Recognizer {
