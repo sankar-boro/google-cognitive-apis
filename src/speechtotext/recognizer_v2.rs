@@ -49,16 +49,23 @@ const GRPC_API_URL: &str = "https://speech.googleapis.com";
 /// Google Speech API recognizer builder
 #[derive(Debug)]
 pub struct RecognizerBuilder {
-    // Google Cloud Platform JSON credentials for project with Speech APIs enabled
+    /// Google Cloud Platform JSON credentials for project with Speech APIs enabled
     google_credentials: String,
-    //  Streaming recognition configuration
+
+    ///  Streaming recognition configuration
     config: StreamingRecognitionConfig,
-    // Capacity of audio sink (tokio channel used by caller to send audio data).
-    // If not provided defaults to 1000.
+
+    /// Capacity of audio sink (tokio channel used by caller to send audio data).
+    /// If not provided defaults to 1000.
     buffer_size: Option<usize>,
-    // Required. The name of the Recognizer to use during recognition. The expected format is projects/{project}/locations/{location}/recognizers/{recognizer}.
-    // The {recognizer} segment may be set to _ to use an empty implicit Recognizer.
+
+    /// Required. The name of the Recognizer to use during recognition. The expected format is projects/{project}/locations/{location}/recognizers/{recognizer}.
+    /// The {recognizer} segment may be set to _ to use an empty implicit Recognizer.
     recognizer: String,
+    
+    /// Region based api_domain and api_url. eg: "eu-speech.googleapis.com", "https://eu-speech.googleapis.com"
+    api_domain: &'static str,
+    api_url: &'static str,
 }
 
 /// Google Speech API recognizer
@@ -83,7 +90,6 @@ pub struct Recognizer {
 }
 
 impl RecognizerBuilder {
-    /// Create a new builder (required fields)
     pub fn new(
         google_credentials: impl AsRef<str>,
         config: StreamingRecognitionConfig,
@@ -94,35 +100,39 @@ impl RecognizerBuilder {
             config,
             buffer_size: None,
             recognizer: recognizer.as_ref().to_string(),
+            api_domain: GRPC_API_DOMAIN,
+            api_url: GRPC_API_URL,
         }
     }
 
-    /// Set buffer size (optional)
     pub fn buffer_size(mut self, size: usize) -> Self {
         self.buffer_size = Some(size);
         self
     }
 
-    /// Replace config if needed
     pub fn config(mut self, config: StreamingRecognitionConfig) -> Self {
         self.config = config;
         self
     }
 
-    /// Replace credentials if needed
     pub fn google_credentials(mut self, creds: impl AsRef<str>) -> Self {
         self.google_credentials = creds.as_ref().to_string();
         self
     }
 
-    /// Replace recognizer name
     pub fn recognizer(mut self, recognizer: impl AsRef<str>) -> Self {
         self.recognizer = recognizer.as_ref().to_string();
         self
     }
 
+    pub fn endpoint(mut self, api_domain: &'static str, api_url: &'static str) -> Self {
+        self.api_domain = api_domain;
+        self.api_url = api_url;
+        self
+    }
+
     pub async fn build(self) -> Result<Recognizer> {
-        let channel = new_grpc_channel(GRPC_API_DOMAIN, GRPC_API_URL, None).await?;
+        let channel = new_grpc_channel(&self.api_domain, &self.api_url, None).await?;
 
         let token_header_val = get_token(&self.google_credentials)?;
 
@@ -139,7 +149,6 @@ impl RecognizerBuilder {
             streaming_request: Some(StreamingRequest::StreamingConfig(self.config.clone())),
         };
 
-        // send initial config message
         audio_sender.send(streaming_config).await?;
 
         Ok(Recognizer {
